@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PPL Trail">
+<meta name="theme-color" content="#0e0f11">
+<title>PPL Trail</title>
+<link rel="manifest" href="data:application/json,{%22name%22:%22PPL+Trail%22,%22short_name%22:%22PPL%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%230e0f11%22,%22theme_color%22:%22%230e0f11%22}">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0f11;
+  --surface: #16181c;
+  --surface2: #1e2127;
+  --border: #2a2d35;
+  --accent: #d4ff3c;
+  --accent2: #ff6b35;
+  --accent3: #4cc9f0;
+  --text: #e8eaed;
+  --muted: #6b7280;
+  --push: #ff6b35;
+  --pull: #4cc9f0;
+  --leg: #a78bfa;
+  --run: #4ade80;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bot: env(safe-area-inset-bottom, 0px);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; }
+
+/* ── SHELL ── */
+#shell { display:flex; flex-direction:column; height:100%; }
+
+/* ── TOP BAR ── */
+#topbar {
+  padding: calc(var(--safe-top) + 10px) 16px 10px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.tb-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; color:var(--text); }
+.tb-title span { color:var(--accent); }
+.tb-badge {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px;
+  padding:4px 10px; border-radius:4px; background:rgba(212,255,60,0.1);
+  color:var(--accent); border:1px solid rgba(212,255,60,0.25);
+}
+
+/* ── BOTTOM NAV ── */
+#bottomnav {
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding-bottom: var(--safe-bot);
+  flex-shrink: 0;
+}
+.bnav-btn {
+  flex: 1; display:flex; flex-direction:column; align-items:center; gap:3px;
+  padding:10px 4px; border:none; background:none; cursor:pointer;
+  color:var(--muted); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px;
+  transition:color .2s;
+}
+.bnav-btn.active { color:var(--accent); }
+.bnav-icon { font-size:18px; line-height:1; }
+
+/* ── SCROLL AREA ── */
+#scroller { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+
+/* ── SCREENS ── */
+.screen { display:none; }
+.screen.active { display:block; }
+
+/* ── HOME SCREEN ── */
+.home-hero {
+  background: var(--surface);
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+  position:relative; overflow:hidden;
+}
+.home-hero::after {
+  content:'PPL'; position:absolute; right:-10px; top:-10px;
+  font-family:'Bebas Neue',sans-serif; font-size:110px; color:rgba(212,255,60,0.04);
+  pointer-events:none; line-height:1;
+}
+.hh-tag { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:3px; color:var(--accent); text-transform:uppercase; margin-bottom:8px; }
+.hh-title { font-family:'Bebas Neue',sans-serif; font-size:42px; line-height:.95; letter-spacing:2px; margin-bottom:12px; }
+.hh-title span { color:var(--accent); }
+.hh-desc { font-size:13px; color:var(--muted); line-height:1.6; }
+
+.week-selector { padding:16px 16px 0; }
+.ws-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:10px; }
+.ws-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.ws-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:14px 12px; cursor:pointer; transition:all .2s; text-align:center;
+}
+.ws-card:active { transform:scale(.97); }
+.ws-card.active { border-color:var(--accent); background:rgba(212,255,60,0.06); }
+.ws-card.deload { border-color:var(--accent2); }
+.ws-card.deload.active { border-color:var(--accent2); background:rgba(255,107,53,0.08); }
+.ws-week { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:1px; color:var(--text); }
+.ws-card.active .ws-week { color:var(--accent); }
+.ws-card.deload .ws-week { color:var(--accent2); }
+.ws-phase { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; color:var(--muted); margin-top:2px; }
+.ws-rpe { font-size:11px; color:var(--muted); margin-top:4px; }
+.ws-bar { height:3px; background:var(--border); border-radius:2px; margin-top:6px; overflow:hidden; }
+.ws-fill { height:100%; border-radius:2px; background:var(--accent); }
+.ws-card.deload .ws-fill { background:var(--accent2); }
+
+.week-info {
+  margin:12px 16px;
+  background:var(--surface); border:1px solid var(--border); border-radius:10px;
+  padding:14px 16px;
+}
+.wi-title { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:1px; color:var(--text); margin-bottom:4px; }
+.wi-note { font-size:12px; color:var(--muted); line-height:1.6; }
+
+.session-tiles { padding:0 16px 16px; display:flex; flex-direction:column; gap:10px; }
+.st-tile {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  overflow:hidden; cursor:pointer; transition:all .2s;
+  display:grid; grid-template-columns:5px 1fr;
+}
+.st-tile:active { transform:scale(.99); opacity:.9; }
+.st-stripe { }
+.st-tile.push .st-stripe { background:var(--push); }
+.st-tile.pull .st-stripe { background:var(--pull); }
+.st-tile.leg  .st-stripe { background:var(--leg); }
+.st-body { padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.st-left {}
+.st-type { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; }
+.st-tile.push .st-type { color:var(--push); }
+.st-tile.pull .st-type { color:var(--pull); }
+.st-tile.leg  .st-type { color:var(--leg); }
+.st-day { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; color:var(--muted); margin-top:2px; }
+.st-muscles { font-size:11px; color:var(--muted); margin-top:4px; }
+.st-right { text-align:right; flex-shrink:0; }
+.st-time { font-size:13px; font-weight:600; color:var(--muted); }
+.st-excount { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-top:3px; }
+.st-arrow { font-size:18px; color:var(--border); margin-top:4px; }
+
+/* ── SÉANCE SCREEN ── */
+.seance-topbar {
+  position:sticky; top:0; z-index:10;
+  background:var(--surface); border-bottom:1px solid var(--border);
+  padding:12px 16px;
+  display:flex; align-items:center; gap:12px;
+}
+.back-btn {
+  width:36px; height:36px; border-radius:8px; border:1px solid var(--border);
+  background:var(--surface2); color:var(--text); font-size:16px;
+  display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
+}
+.stb-info { flex:1; min-width:0; }
+.stb-type { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; }
+.stb-sub { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; color:var(--muted); }
+.stb-time { font-size:12px; color:var(--muted); flex-shrink:0; }
+
+.seance-meta {
+  margin:12px 16px 0;
+  padding:10px 14px;
+  background:var(--surface2); border-radius:8px;
+  display:flex; gap:16px; flex-wrap:wrap;
+}
+.sm-item { font-size:12px; color:var(--muted); }
+.sm-item strong { color:var(--text); }
+
+.ex-list { padding:12px 16px 100px; display:flex; flex-direction:column; gap:10px; }
+
+.ex-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  overflow:hidden;
+}
+.ex-card-header {
+  padding:14px 16px 10px;
+  display:flex; align-items:flex-start; justify-content:space-between; gap:8px;
+}
+.ex-tag-pill {
+  font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px;
+  padding:2px 7px; border-radius:3px; flex-shrink:0; margin-top:2px;
+}
+.pill-compound { background:rgba(212,255,60,0.1); color:var(--accent); }
+.pill-iso { background:rgba(167,139,250,0.1); color:var(--leg); }
+.pill-trail { background:rgba(76,201,240,0.1); color:var(--pull); }
+.ex-name-wrap { flex:1; }
+.ex-name { font-weight:600; font-size:15px; color:var(--text); line-height:1.3; }
+.ex-sets-badge {
+  font-family:'DM Mono',monospace; font-size:12px; color:var(--accent);
+  margin-top:4px; display:block;
+}
+.ex-tip-area {
+  padding:0 16px 14px;
+}
+.ex-tip-toggle {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px;
+  color:var(--muted); background:none; border:none; cursor:pointer;
+  padding:0; text-decoration:underline; text-underline-offset:3px;
+}
+.ex-tip-text {
+  display:none;
+  font-size:12px; color:var(--muted); line-height:1.6; font-style:italic;
+  margin-top:8px; padding:10px 12px;
+  background:var(--surface2); border-radius:6px;
+}
+.ex-tip-text.open { display:block; }
+
+/* charges input */
+.ex-charges {
+  border-top:1px solid var(--border);
+  padding:10px 16px;
+  display:flex; align-items:center; gap:10px;
+}
+.ec-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; color:var(--muted); flex-shrink:0; }
+.ec-input {
+  flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:6px;
+  color:var(--text); font-family:'DM Mono',monospace; font-size:13px;
+  padding:7px 10px; min-width:0;
+}
+.ec-input:focus { outline:none; border-color:var(--accent); }
+.ec-unit { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); flex-shrink:0; }
+
+/* ── CALENDRIER SCREEN ── */
+.cal-screen-header {
+  padding:16px 16px 0;
+}
+.csh-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:10px; }
+.cal-week-btns { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+.cwb {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px;
+  padding:7px 14px; border-radius:20px; border:1px solid var(--border);
+  background:var(--surface); color:var(--muted); cursor:pointer; transition:all .2s;
+}
+.cwb.active { background:var(--accent); color:var(--bg); border-color:var(--accent); font-weight:600; }
+.cwb.deload { border-color:var(--accent2); color:var(--accent2); }
+.cwb.deload.active { background:var(--accent2); color:var(--bg); border-color:var(--accent2); }
+.cal-deload-msg {
+  display:none; margin:0 16px 10px;
+  font-size:12px; color:var(--accent2);
+  background:rgba(255,107,53,0.08); border-left:3px solid var(--accent2);
+  border-radius:0 6px 6px 0; padding:8px 12px;
+}
+.cal-deload-msg.show { display:block; }
+
+.cal-days-row {
+  display:grid; grid-template-columns:repeat(7,1fr); gap:4px;
+  padding:0 16px; margin-bottom:4px;
+}
+.cdr-day { text-align:center; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; color:var(--muted); padding:4px 0; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; padding:0 16px 16px; }
+
+.cal-cell {
+  background:var(--surface); border:1.5px dashed var(--border); border-radius:8px;
+  min-height:80px; padding:5px; display:flex; flex-direction:column; gap:3px;
+  transition:border-color .15s, background .15s;
+}
+.cal-cell.has-chip { border-style:solid; }
+.cal-cell.drag-over { border-color:var(--accent); background:rgba(212,255,60,0.05); }
+
+.cal-chip {
+  border-radius:4px; padding:4px 5px; font-size:10px; font-weight:600;
+  cursor:grab; user-select:none; display:flex; align-items:center;
+  justify-content:space-between; gap:2px; line-height:1.2;
+}
+.cal-chip:active { cursor:grabbing; opacity:.65; }
+.cal-chip-x { opacity:0; font-size:10px; border:none; background:none; cursor:pointer; color:inherit; padding:0 1px; flex-shrink:0; transition:opacity .15s; }
+.cal-chip:hover .cal-chip-x, .cal-chip:active .cal-chip-x { opacity:.7; }
+.chip-push { background:rgba(255,107,53,0.15); color:#ff6b35; border:1px solid rgba(255,107,53,0.3); }
+.chip-pull { background:rgba(76,201,240,0.12); color:#4cc9f0; border:1px solid rgba(76,201,240,0.25); }
+.chip-leg  { background:rgba(167,139,250,0.12); color:#a78bfa; border:1px solid rgba(167,139,250,0.25); }
+.chip-run  { background:rgba(74,222,128,0.1); color:#4ade80; border:1px solid rgba(74,222,128,0.25); }
+.chip-rest { background:rgba(107,114,128,0.1); color:var(--muted); border:1px solid var(--border); }
+
+.cal-add { font-size:9px; color:var(--muted); background:none; border:none; cursor:pointer; padding:2px 0; text-align:left; margin-top:auto; }
+.cal-add:active { color:#4ade80; }
+
+.cal-palette-box { margin:0 16px 100px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; }
+.cpb-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:10px; }
+.cpb-chips { display:flex; gap:8px; flex-wrap:wrap; }
+.cp-chip {
+  border-radius:5px; padding:8px 14px; font-size:12px; font-weight:600;
+  cursor:grab; user-select:none; transition:opacity .15s, transform .15s;
+}
+.cp-chip:active { cursor:grabbing; opacity:.65; transform:scale(.97); }
+
+/* ── CARNET SCREEN ── */
+.carnet-screen { padding:16px 16px 100px; }
+.carnet-week-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+.cwt-btn {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:1px;
+  padding:7px 12px; border-radius:8px; border:1px solid var(--border);
+  background:var(--surface); color:var(--muted); cursor:pointer; transition:all .2s;
+}
+.cwt-btn.active { background:var(--accent); color:var(--bg); border-color:var(--accent); font-weight:600; }
+
+.carnet-section-label {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px;
+  color:var(--muted); text-transform:uppercase; margin:0 0 8px;
+}
+.carnet-textarea {
+  width:100%; min-height:120px; background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px;
+  padding:12px 14px; resize:none; line-height:1.6; margin-bottom:10px;
+}
+.carnet-textarea:focus { outline:none; border-color:var(--accent); }
+.carnet-textarea::placeholder { color:var(--muted); }
+.save-btn {
+  width:100%; padding:12px; border-radius:10px;
+  border:1px solid var(--border); background:var(--surface2);
+  color:var(--muted); font-family:'DM Mono',monospace; font-size:11px;
+  letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all .2s;
+  margin-bottom:20px;
+}
+.save-btn:active { background:var(--accent); color:var(--bg); border-color:var(--accent); }
+
+.charges-section { margin-top:4px; }
+.cs-grid { display:flex; flex-direction:column; gap:6px; }
+.cs-row {
+  background:var(--surface); border:1px solid var(--border); border-radius:8px;
+  padding:10px 12px; display:flex; align-items:center; gap:10px;
+}
+.cs-exname { flex:1; font-size:13px; color:var(--text); min-width:0; line-height:1.3; }
+.cs-input {
+  width:70px; background:var(--surface2); border:1px solid var(--border); border-radius:6px;
+  color:var(--text); font-family:'DM Mono',monospace; font-size:12px;
+  padding:6px 8px; text-align:center; flex-shrink:0;
+}
+.cs-input:focus { outline:none; border-color:var(--accent); }
+.cs-kg { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); flex-shrink:0; }
+</style>
+</head>
+<body>
+<div id="shell">
+  <div id="topbar">
+    <div class="tb-title">PUSH PULL <span>LEG</span></div>
+    <div class="tb-badge" id="topBadge">S1 · RPE 6</div>
+  </div>
+
+  <div id="scroller">
+    <!-- HOME -->
+    <div class="screen active" id="screen-home">
+      <div class="home-hero">
+        <div class="hh-tag">// Programme 6 semaines · Prépa Trail</div>
+        <div class="hh-title">PUSH<br>PULL<br><span>LEG</span></div>
+        <div class="hh-desc">3 séances/semaine. Poids libres. Progression linéaire. Adapté à ta prépa trail 100km.</div>
+      </div>
+      <div class="week-selector">
+        <div class="ws-label">// Sélectionne ta semaine</div>
+        <div class="ws-grid" id="weekGrid"></div>
+      </div>
+      <div class="week-info" id="weekInfo" style="margin:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;"></div>
+      <div class="session-tiles" id="sessionTiles"></div>
+    </div>
+
+    <!-- SÉANCE -->
+    <div class="screen" id="screen-seance">
+      <div class="seance-topbar">
+        <button class="back-btn" onclick="goHome()">←</button>
+        <div class="stb-info">
+          <div class="stb-type" id="stbType"></div>
+          <div class="stb-sub" id="stbSub"></div>
+        </div>
+        <div class="stb-time" id="stbTime"></div>
+      </div>
+      <div class="seance-meta" id="seanceMeta"></div>
+      <div class="ex-list" id="exList"></div>
+    </div>
+
+    <!-- CALENDRIER -->
+    <div class="screen" id="screen-cal">
+      <div class="cal-screen-header">
+        <div class="csh-label">// Calendrier hebdo</div>
+        <div class="cal-week-btns" id="calWeekBtns"></div>
+      </div>
+      <div class="cal-deload-msg" id="calDeloadMsg">Semaine déload — pas de Leg.</div>
+      <div class="cal-days-row" id="calDaysRow"></div>
+      <div class="cal-grid" id="calGridEl"></div>
+      <div class="cal-palette-box">
+        <div class="cpb-label">// Glisse dans le calendrier</div>
+        <div class="cpb-chips" id="calPaletteEl"></div>
+      </div>
+    </div>
+
+    <!-- CARNET -->
+    <div class="screen" id="screen-carnet">
+      <div class="carnet-screen">
+        <div class="carnet-section-label">// Semaine active</div>
+        <div class="carnet-week-tabs" id="carnetTabs"></div>
+        <div class="carnet-section-label">// Notes de séance</div>
+        <textarea class="carnet-textarea" id="carnetNote" placeholder="Sensations, douleurs, fatigue, météo...&#10;Note tout ce qui peut t'aider à progresser."></textarea>
+        <button class="save-btn" onclick="saveNote()">Enregistrer la note</button>
+        <div class="charges-section">
+          <div class="carnet-section-label">// Charges utilisées — semaine <span id="chargesWeekLabel"></span></div>
+          <div class="cs-grid" id="chargesGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="bottomnav">
+    <button class="bnav-btn active" onclick="showScreen('home')" id="bnav-home">
+      <div class="bnav-icon">🏠</div>
+      <div>PLAN</div>
+    </button>
+    <button class="bnav-btn" onclick="showScreen('cal')" id="bnav-cal">
+      <div class="bnav-icon">📅</div>
+      <div>CALENDRIER</div>
+    </button>
+    <button class="bnav-btn" onclick="showScreen('carnet')" id="bnav-carnet">
+      <div class="bnav-icon">📒</div>
+      <div>CARNET</div>
+    </button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   DATA
+═══════════════════════════════════════ */
+const WEEKS = [
+  { label:'S1', phase:'Technique', rpe:'6', pct:60, note:'Prise de repères. Charges légères, technique avant tout. Tu dois finir chaque série en ayant l\'impression d\'avoir encore 4 reps devant toi.' },
+  { label:'S2', phase:'Technique+', rpe:'6–7', pct:68, note:'Mêmes exercices qu\'en S1. Légère augmentation de charge si la technique est bonne. +1 série sur les composés principaux.' },
+  { label:'S3', phase:'Force', rpe:'7–8', pct:78, note:'On entre en phase de force. Les reps baissent (8–12), les charges augmentent. Repos plus long. Sens la résistance sur les dernières reps.' },
+  { label:'S4', phase:'Force+', rpe:'8', pct:86, note:'Charge maximale intermédiaire. Si tu stagnes, conserve la charge de S3 et ajoute 1 série. La récupération devient critique.' },
+  { label:'S5', phase:'Intense', rpe:'8–9', pct:94, note:'Intensification. Reps réduites (6–8), charges maximales. Note tes performances — ce sont tes références pour le prochain cycle.' },
+  { label:'S6', phase:'Déload', rpe:'6', pct:42, note:'Semaine de déload trail. Pas de séance Leg. Push et Pull en volume réduit (–30%) et charge réduite (~70% de S5). Priorité à la récup.', deload:true },
+];
+
+const SESSIONS = {
+  1: [
+    { type:'push', day:'Lundi', muscles:'Poitrine · Épaules · Triceps', time:'~50 min', repos:'90 sec', warmup:'5–8 min mobilité épaules', exercises:[
+      { tag:'compound', name:'Développé couché barre', sets:'3 × 15 reps — RPE 6', tip:'Charge très légère (barre seule ou 10–20 kg max). Focus : descendre la barre jusqu\'au sternum, coudes à 45°, pas à 90°. Respire : inspire en descente, expire en poussée.' },
+      { tag:'compound', name:'Développé militaire haltères assis', sets:'3 × 15 reps — RPE 6', tip:'Haltères légers (5–10 kg). Bras à 90° au départ, pousse en arc vers le haut sans verrouiller les coudes. Dos bien plaqué contre le dossier.' },
+      { tag:'iso', name:'Écarté haltères couché (pec fly)', sets:'3 × 15 reps — RPE 6', tip:'Léger arc de cercle, coudes légèrement fléchis. Sens l\'étirement en bas, la contraction en haut. Ne pas prendre lourd.' },
+      { tag:'iso', name:'Élévations latérales haltères', sets:'3 × 15 reps — RPE 6', tip:'Bras quasi tendus, monte jusqu\'à l\'horizontale. Pouce légèrement vers le bas (comme si tu versais un verre). Mouvement lent et contrôlé.' },
+      { tag:'iso', name:'Dips prise serrée (ou extensions triceps haltère)', sets:'3 × 12 reps — RPE 6', tip:'Si dips : corps droit, coudes près du corps. Si haltère : bras tendu au-dessus de la tête, descend derrière la nuque, remonte en gardant le coude fixe.' },
+    ]},
+    { type:'pull', day:'Mercredi', muscles:'Dos · Biceps · Épaules post.', time:'~50 min', repos:'90 sec', warmup:'5 min mobilité dos / épaules', exercises:[
+      { tag:'compound', name:'Tirage vertical machine (ou tractions assistées)', sets:'3 × 15 reps — RPE 6', tip:'Prise pronation, largeur d\'épaules. Tire les coudes vers le bas et arrière. Contraction en bas, étirement complet en haut. Ne te penche pas en arrière pour tricher.' },
+      { tag:'compound', name:'Rowing barre (ou rowing haltère unilatéral)', sets:'3 × 15 reps — RPE 6', tip:'Penché à ~45°, dos plat neutre. Tire la barre vers le nombril en gardant les coudes proches du corps. Contraction du dos en haut, descente contrôlée.' },
+      { tag:'iso', name:'Butterfly inverse (oiseau) haltères', sets:'3 × 15 reps — RPE 6', tip:'Penché à 90°, bras pendants. Monte les bras en arc de cercle jusqu\'à l\'horizontal en pinçant les omoplates. Isole les deltoïdes postérieurs.' },
+      { tag:'iso', name:'Curl barre ou haltères (biceps)', sets:'3 × 15 reps — RPE 6', tip:'Coudes fixes contre le corps. Monte en supination (paumes vers toi), descends lentement (3 secondes). Pas de balancement du dos.' },
+      { tag:'iso', name:'Face pull avec élastique ou câble', sets:'3 × 15 reps — RPE 6', tip:'Tire vers le visage en écartant les mains. Coudes à hauteur d\'épaules ou au-dessus. Maintiens 1 sec en contraction. Essentiel pour la santé des épaules.' },
+    ]},
+    { type:'leg', day:'Vendredi', muscles:'Fessiers · Quads · Mollets', time:'~45 min', repos:'90 sec', warmup:'5 min dynamique (leg swing, hip circle)', exercises:[
+      { tag:'compound', name:'Squat gobelet (haltère devant)', sets:'3 × 15 reps — RPE 6', tip:'Haltère tenu à deux mains contre la poitrine. Pieds largeur d\'épaules, orteils légèrement ouverts. Descends jusqu\'à ce que les cuisses soient parallèles au sol. Garde le buste droit.' },
+      { tag:'trail', name:'Fente marchée haltères', sets:'3 × 12 reps / jambe — RPE 6', tip:'Simule la foulée trail. Grand pas en avant, genou arrière proche du sol. Pousse fort sur le pied avant pour te propulser. Haltères légers (5 kg / main).' },
+      { tag:'trail', name:'Hip thrust avec barre (ou haltère)', sets:'3 × 15 reps — RPE 6', tip:'Dos sur le banc, barre sur les hanches, pieds à plat. Pousse les hanches vers le haut en contractant les fessiers fort. Maintiens 1–2 sec en haut. LE meilleur exercice fessiers.' },
+      { tag:'trail', name:'Soulevé de terre jambes tendues (roumain)', sets:'3 × 15 reps — RPE 6', tip:'Barre légère. Glisse la barre le long des jambes en poussant les hanches en arrière. Étirement ischios, contraction en remontant. Dos toujours neutre.' },
+      { tag:'trail', name:'Élévations des mollets debout (step ou sol)', sets:'3 × 20 reps — RPE 6', tip:'Sur une marche, descends le talon sous le niveau du pied (amplitude complète), puis monte sur la pointe. Lent sur la descente (3 sec). Mollets = muscles d\'endurance → volume élevé.' },
+    ]},
+  ],
+  2: [
+    { type:'push', day:'Lundi', muscles:'Poitrine · Épaules · Triceps', time:'~55 min', repos:'90–120 sec', warmup:'5 min mobilité épaules', exercises:[
+      { tag:'compound', name:'Développé couché barre', sets:'4 × 12 reps — RPE 7', tip:'+1 série vs S1. Augmente la charge de 2,5–5 kg si la technique était propre. Tu dois pouvoir faire 2 reps supplémentaires à la fin de chaque série.' },
+      { tag:'compound', name:'Développé militaire haltères assis', sets:'4 × 12 reps — RPE 7', tip:'Légère augmentation de charge. Conserve la même technique, focus sur la contraction au sommet.' },
+      { tag:'iso', name:'Écarté haltères couché', sets:'3 × 15 reps — RPE 6', tip:'Garde le même poids qu\'en S1. L\'objectif ici est d\'améliorer la qualité du mouvement et l\'amplitude.' },
+      { tag:'iso', name:'Élévations latérales haltères', sets:'3 × 15 reps — RPE 6', tip:'Essaie une légère augmentation de charge si les 15 reps se faisaient trop facilement.' },
+      { tag:'iso', name:'Extensions triceps haltère (skull crusher léger)', sets:'3 × 12 reps — RPE 7', tip:'Allongé, haltères, descend vers le front/derrière la tête, remonte en contractant les triceps. Coudes fixes.' },
+    ]},
+    { type:'pull', day:'Mercredi', muscles:'Dos · Biceps · Épaules post.', time:'~55 min', repos:'90–120 sec', warmup:'5 min mobilité dos', exercises:[
+      { tag:'compound', name:'Tirage vertical machine', sets:'4 × 12 reps — RPE 7', tip:'+1 série, légère augmentation de charge. Concentre-toi sur l\'initiation du mouvement avec les omoplates, pas les bras.' },
+      { tag:'compound', name:'Rowing barre', sets:'4 × 12 reps — RPE 7', tip:'Augmente la charge si la technique était impeccable. Le dos doit rester parfaitement plat tout du long.' },
+      { tag:'iso', name:'Butterfly inverse haltères', sets:'3 × 15 reps — RPE 6', tip:'Même charge qu\'en S1, focus sur la contraction au sommet. Maintiens 1 sec en haut.' },
+      { tag:'iso', name:'Curl marteau haltères', sets:'3 × 12 reps — RPE 7', tip:'Prise neutre (pouces vers le haut). Très bon pour le brachial (muscle sous le biceps). Alterne : curl marteau en S2, curl classique en S3.' },
+      { tag:'iso', name:'Face pull + Shrugs haltères', sets:'3 × 15 reps chaque — RPE 6', tip:'Shrugs : haltères au corps, hausse les épaules vers les oreilles. Maintiens 1 sec. Travaille les trapèzes supérieurs.' },
+    ]},
+    { type:'leg', day:'Vendredi', muscles:'Fessiers · Quads · Mollets', time:'~45 min', repos:'90–120 sec', warmup:'5 min dynamique', exercises:[
+      { tag:'compound', name:'Squat gobelet', sets:'4 × 12 reps — RPE 7', tip:'+1 série et/ou augmentation de l\'haltère. Essaie de descendre encore un peu plus bas si tu peux.' },
+      { tag:'trail', name:'Fente marchée haltères', sets:'3 × 12 reps / jambe — RPE 7', tip:'Légère augmentation de charge. Le trail demande un vrai travail unilatéral (chaque jambe séparément) — essentiel contre les déséquilibres.' },
+      { tag:'trail', name:'Hip thrust barre', sets:'4 × 12 reps — RPE 7', tip:'+1 série et/ou augmentation de charge. Maintiens 2 sec en haut. Fessiers puissants = propulsion en montée en trail.' },
+      { tag:'trail', name:'Romanian deadlift barre', sets:'3 × 12 reps — RPE 7', tip:'Légère augmentation de charge. Ce mouvement renforce les ischios qui protègent les genoux en descente de trail.' },
+      { tag:'trail', name:'Élévations mollets unilatérales (1 jambe)', sets:'3 × 15 reps / jambe — RPE 7', tip:'Sur une jambe = beaucoup plus difficile et spécifique trail. Tiens un haltère dans la main opposée si trop facile.' },
+    ]},
+  ],
+  3: [
+    { type:'push', day:'Lundi', muscles:'Poitrine · Épaules · Triceps', time:'~60 min', repos:'2–3 min', warmup:'5 min mobilité épaules', exercises:[
+      { tag:'compound', name:'Développé couché barre', sets:'4 × 8–10 reps — RPE 7–8', tip:'Augmentation significative de la charge vs S2 (+5 kg ou plus). Les dernières reps doivent être difficiles mais la technique reste propre.' },
+      { tag:'compound', name:'Développé incliné haltères (30°)', sets:'4 × 10 reps — RPE 7–8', tip:'Nouveau : banc incliné à 30°. Travaille la partie haute de la poitrine. Plus utile que le développé plat incliné à 45°.' },
+      { tag:'compound', name:'Développé militaire haltères debout', sets:'3 × 10 reps — RPE 7–8', tip:'Debout = plus difficile (stabilisation du tronc). Augmente légèrement la charge vs S2 assis.' },
+      { tag:'iso', name:'Élévations latérales haltères', sets:'3 × 12 reps — RPE 7', tip:'Augmentation de charge si possible. Toujours : mouvement lent et contrôlé.' },
+      { tag:'iso', name:'Triceps barre en Z / skull crusher', sets:'3 × 10 reps — RPE 7–8', tip:'Allongé, barre vers le front. Contrôle la descente (2–3 sec), pousse fort. Excellent pour la masse des triceps.' },
+    ]},
+    { type:'pull', day:'Mercredi', muscles:'Dos · Biceps · Épaules post.', time:'~60 min', repos:'2–3 min', warmup:'5 min mobilité dos', exercises:[
+      { tag:'compound', name:'Tirage vertical machine (prise supination)', sets:'4 × 8–10 reps — RPE 7–8', tip:'Prise inversée (paumes vers toi) cette semaine. Active davantage les biceps. Tire les coudes vers le bas et les hanches.' },
+      { tag:'compound', name:'Rowing haltère unilatéral (1 bras)', sets:'4 × 10 reps / côté — RPE 7–8', tip:'1 genou et 1 main sur le banc. Tire l\'haltère vers la hanche (pas vers l\'épaule). Excellent pour corriger les déséquilibres dos.' },
+      { tag:'compound', name:'Rowing barre (prise pronation)', sets:'3 × 10 reps — RPE 7–8', tip:'Augmentation de charge vs S2. Le rowing barre est l\'exercice roi pour l\'épaisseur du dos.' },
+      { tag:'iso', name:'Curl barre EZ (ou barre droite)', sets:'3 × 10 reps — RPE 7–8', tip:'Augmentation de charge. Tempo : 2 sec montée, 1 sec contraction, 2 sec descente. Pas de balancement.' },
+      { tag:'iso', name:'Face pull + Butterfly inverse', sets:'3 × 12 reps chaque — RPE 6–7', tip:'Séries de finition. Gardées légères pour la santé de l\'épaule. Ces 2 exercices sont ton assurance contre les blessures de coiffe.' },
+    ]},
+    { type:'leg', day:'Vendredi', muscles:'Fessiers · Quads · Mollets', time:'~50 min', repos:'2–3 min', warmup:'5 min dynamique', exercises:[
+      { tag:'compound', name:'Squat barre haute (transition du gobelet)', sets:'4 × 8–10 reps — RPE 7–8', tip:'Si tu maîtrises le gobelet, passe à la barre sur les trapèzes. Charge légère pour commencer. Garde la poitrine haute, les genoux dans l\'axe des pieds.' },
+      { tag:'trail', name:'Fente bulgare (pied arrière surélevé)', sets:'3 × 10 reps / jambe — RPE 7–8', tip:'Pied arrière sur le banc, pied avant loin devant. Descends jusqu\'à ce que le genou arrière frôle le sol. Excellent pour les fessiers et l\'équilibre.' },
+      { tag:'trail', name:'Hip thrust barre (leste)', sets:'4 × 10 reps — RPE 7–8', tip:'Augmentation de charge. Tu dois vraiment sentir les fessiers travailler, pas les lombaires. Si tu sens les lombaires, rapproche les pieds du bassin.' },
+      { tag:'trail', name:'Romanian deadlift barre', sets:'4 × 8–10 reps — RPE 7–8', tip:'Augmentation de charge. Sens l\'étirement dans les ischios. Fondamental pour la descente trail (freinage excentrique).' },
+      { tag:'trail', name:'Mollets debout unilatéraux + step', sets:'3 × 15 reps / jambe — RPE 7', tip:'Haltère dans la main opposée. Amplitude complète indispensable (talon sous le niveau du step). Les mollets récupèrent vite → garde le volume élevé.' },
+    ]},
+  ],
+  4: [
+    { type:'push', day:'Lundi', muscles:'Poitrine · Épaules · Triceps', time:'~60 min', repos:'2–3 min', warmup:'5 min mobilité épaules', exercises:[
+      { tag:'compound', name:'Développé couché barre', sets:'4 × 8 reps — RPE 8', tip:'Charge maximale sécurisée. Les 8 reps doivent être difficiles. 2 reps en réserve max. Si tu rates la 8ème, c\'est trop lourd → retire 5 kg.' },
+      { tag:'compound', name:'Développé incliné haltères', sets:'4 × 8–10 reps — RPE 8', tip:'Augmentation de charge vs S3. Les haltères permettent une plus grande amplitude que la barre → meilleur étirement pectoral.' },
+      { tag:'compound', name:'Développé militaire debout barre', sets:'4 × 8 reps — RPE 8', tip:'Barre devant, pas derrière la tête. Gaine abdominale contractée. Ne creuse pas les lombaires. Excellent pour les épaules.' },
+      { tag:'iso', name:'Élévations latérales + frontales superset', sets:'3 × 12 reps chaque — RPE 7', tip:'Superset : latérales puis frontales sans repos entre les 2. Repos 90 sec après le superset. Brûlure garantie sur les deltoïdes.' },
+      { tag:'iso', name:'Skull crusher + Extensions triceps câble', sets:'3 × 10 reps chaque — RPE 7–8', tip:'Skull crusher = masse, extension câble = congestion (pump). Triceps bien fatigués = signe que tu as bien travaillé la poussée.' },
+    ]},
+    { type:'pull', day:'Mercredi', muscles:'Dos · Biceps · Épaules post.', time:'~60 min', repos:'2–3 min', warmup:'5 min mobilité dos', exercises:[
+      { tag:'compound', name:'Tirage vertical machine (prise pronation large)', sets:'4 × 8 reps — RPE 8', tip:'Prise large cette semaine. Alterne les prises semaine après semaine pour stimuler différentes zones du grand dorsal.' },
+      { tag:'compound', name:'Rowing barre (prise supination)', sets:'4 × 8 reps — RPE 8', tip:'Prise inversée = plus de biceps et de bas du dos. Toujours : dos plat, regard légèrement vers le bas, pas de rebond avec les hanches.' },
+      { tag:'compound', name:'Rowing haltère unilatéral', sets:'3 × 10 reps / côté — RPE 7–8', tip:'Augmentation de charge. Essaie de retarder l\'utilisation du biceps le plus possible — c\'est le dos qui doit initier le mouvement.' },
+      { tag:'iso', name:'Curl barre + Curl concentré superset', sets:'3 × 10 reps chaque — RPE 7–8', tip:'Curl concentré : coude contre cuisse intérieure, tire l\'haltère vers l\'épaule en supinant le poignet en haut. Pic du biceps++.' },
+      { tag:'iso', name:'Face pull + Butterfly inverse', sets:'3 × 15 reps chaque — RPE 6', tip:'Toujours présents pour la santé des épaules. Ne les zappe jamais même quand tu es fatigué.' },
+    ]},
+    { type:'leg', day:'Vendredi', muscles:'Fessiers · Quads · Mollets', time:'~50 min', repos:'2–3 min', warmup:'5 min dynamique', exercises:[
+      { tag:'compound', name:'Squat barre', sets:'4 × 8 reps — RPE 8', tip:'Charge maximale du programme jusqu\'ici. 1 série d\'échauffement avec barre seule, 1 série légère, puis les 4 séries de travail. Focus sur la profondeur.' },
+      { tag:'trail', name:'Fente bulgare haltères', sets:'4 × 8 reps / jambe — RPE 8', tip:'Augmentation de charge. Cet exercice simule parfaitement la poussée en montée trail. Tu vas le sentir le lendemain !' },
+      { tag:'trail', name:'Hip thrust barre (charge maximale)', sets:'4 × 8 reps — RPE 8', tip:'Pousse fort. Les fessiers sont ton moteur principal en montée. Ce sont eux qui t\'éviteront les douleurs de genou sur terrain pentu.' },
+      { tag:'trail', name:'Romanian deadlift barre', sets:'4 × 8 reps — RPE 8', tip:'Charge lourde mais dos plat impératif. Les ischios forts = protection des LCA en descente raide. Investissement essentiel pour le trail.' },
+      { tag:'trail', name:'Élévations mollets lestées (step)', sets:'4 × 15 reps / jambe — RPE 7', tip:'Avec haltère ou gilet lesté. Descends vraiment sous le niveau du step. Les mollets travaillent dans toute l\'amplitude en trail.' },
+    ]},
+  ],
+  5: [
+    { type:'push', day:'Lundi', muscles:'Poitrine · Épaules · Triceps', time:'~55 min', repos:'3 min', warmup:'5 min mobilité épaules', exercises:[
+      { tag:'compound', name:'Développé couché barre', sets:'4 × 6 reps — RPE 8–9', tip:'Charge significativement augmentée. 6 reps difficiles avec 1 rep en réserve seulement. C\'est ici que tu vas vraiment construire de la force.' },
+      { tag:'compound', name:'Développé incliné haltères', sets:'3 × 8 reps — RPE 8', tip:'Augmentation de charge. 3 séries seulement pour compenser l\'intensité du développé couché.' },
+      { tag:'compound', name:'Développé militaire barre', sets:'3 × 8 reps — RPE 8', tip:'Charge maximale sur cet exercice dans ce programme. Focus : gainage abdominal, pas d\'hyperextension lombaire.' },
+      { tag:'iso', name:'Élévations latérales haltères', sets:'3 × 15 reps — RPE 6', tip:'Garde léger ici. L\'intensité des 3 premiers exercices suffit. Les élévations = finition et pump.' },
+      { tag:'iso', name:'Dips lestés (ou skull crusher lourd)', sets:'3 × 8 reps — RPE 8', tip:'Si dips : ceinture de lest ou haltère entre les jambes. Corps droit pour cibler les triceps. Amplitude complète.' },
+    ]},
+    { type:'pull', day:'Mercredi', muscles:'Dos · Biceps · Épaules post.', time:'~55 min', repos:'3 min', warmup:'5 min mobilité dos', exercises:[
+      { tag:'compound', name:'Tirage vertical machine (charge lourde)', sets:'4 × 6–8 reps — RPE 8–9', tip:'Charge max de ce programme. Tu dois vraiment te battre sur les dernières reps. Technique propre coûte que coûte.' },
+      { tag:'compound', name:'Rowing barre lourd', sets:'4 × 6–8 reps — RPE 8–9', tip:'Charge maximale. Le rowing lourd est un excellent indicateur de ton développement global du dos. Note ta charge.' },
+      { tag:'compound', name:'Rowing haltère unilatéral', sets:'3 × 8 reps / côté — RPE 8', tip:'Charge maximale. Pense à initier avec l\'omoplate avant de fléchir le coude.' },
+      { tag:'iso', name:'Curl barre EZ lourd', sets:'4 × 8 reps — RPE 8', tip:'Charge maximale biceps. Tempo contrôlé (2-1-3). Pas de balancement, même si tu veux tricher.' },
+      { tag:'iso', name:'Face pull + Butterfly inverse', sets:'3 × 15 reps chaque — RPE 6', tip:'Incontournables. S5 est lourde → encore plus important de prendre soin des épaules.' },
+    ]},
+    { type:'leg', day:'Vendredi', muscles:'Fessiers · Quads · Mollets', time:'~50 min', repos:'3 min', warmup:'5 min dynamique', exercises:[
+      { tag:'compound', name:'Squat barre (charge maximale programme)', sets:'4 × 6 reps — RPE 8–9', tip:'C\'est ta dernière séance squat lourd (S6 = pas de Leg). Donne tout. Note ta charge : c\'est ta référence pour le prochain bloc.' },
+      { tag:'trail', name:'Fente bulgare haltères lourdes', sets:'4 × 8 reps / jambe — RPE 8–9', tip:'Charge maximale. Dernier entraînement spécifique trail des jambes. Finis fort.' },
+      { tag:'trail', name:'Hip thrust barre (charge max)', sets:'4 × 8 reps — RPE 8–9', tip:'Charge maximale de tout le programme. Note-la. Ton niveau de départ pour le prochain bloc de renfo.' },
+      { tag:'trail', name:'Romanian deadlift barre', sets:'3 × 8 reps — RPE 8', tip:'Légèrement réduit (3 séries vs 4) car charge maximale sur squat et hip thrust. Priorité aux fessiers ce soir.' },
+      { tag:'trail', name:'Mollets lestés unilatéraux', sets:'3 × 12 reps / jambe — RPE 7–8', tip:'Charge maximale sur les mollets. Après S5, les jambes ont 7 jours de repos total. Profites-en !' },
+    ]},
+  ],
+  6: [
+    { type:'push', day:'Lundi', muscles:'Poitrine · Épaules · Triceps', time:'~35 min', repos:'90 sec', warmup:'5 min mobilité', exercises:[
+      { tag:'compound', name:'Développé couché barre', sets:'3 × 8 reps — RPE 6 (70% de S5)', tip:'Le déload permet aux adaptations musculaires de se consolider. Ne saute pas cette séance : elle maintient le stimulus tout en permettant la récupération totale.' },
+      { tag:'compound', name:'Développé militaire haltères assis', sets:'3 × 8 reps — RPE 6', tip:'Revenir à la version assise plus stable. Charge légère, technique parfaite. Profite pour corriger un défaut identifié dans les semaines précédentes.' },
+      { tag:'iso', name:'Élévations latérales', sets:'2 × 15 reps — RPE 6', tip:'Léger et technique. 2 séries suffisent.' },
+      { tag:'iso', name:'Extensions triceps (câble ou haltère)', sets:'2 × 15 reps — RPE 6', tip:'Finition légère. Ne cherche pas la performance cette semaine.' },
+    ]},
+    { type:'pull', day:'Mercredi', muscles:'Dos · Biceps · Épaules post.', time:'~35 min', repos:'90 sec', warmup:'5 min mobilité', exercises:[
+      { tag:'compound', name:'Tirage vertical machine', sets:'3 × 8 reps — RPE 6 (70% de S5)', tip:'Charge légère, amplitude parfaite. Profite pour sentir vraiment le grand dorsal travailler sans la fatigue des semaines lourdes.' },
+      { tag:'compound', name:'Rowing haltère unilatéral', sets:'3 × 10 reps / côté — RPE 6', tip:'Charge légère. Focus sur la qualité du mouvement et la contraction du dos à chaque rep.' },
+      { tag:'iso', name:'Curl haltères + Face pull', sets:'2 × 15 reps chaque — RPE 6', tip:'Léger. Le face pull reste incontournable même en déload : santé des épaules avant tout.' },
+    ]},
+  ],
+};
+
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
+let currentWeek = parseInt(localStorage.getItem('ppl_week') || '1');
+let currentSeance = null;
+let calWeek = 1;
+let carnetWeek = 1;
+let calData = {};
+let calDragging = null;
+let calDragSrc = null;
+
+function uid() { return Math.random().toString(36).slice(2,8); }
+function save(k,v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+function load(k,d) { try { const v=localStorage.getItem(k); return v?JSON.parse(v):d; } catch(e){return d;} }
+
+const CAL_DEFAULTS = {
+  1:[{day:0,type:'push',label:'Push'},{day:2,type:'pull',label:'Pull'},{day:4,type:'leg',label:'Leg'}],
+  2:[{day:0,type:'push',label:'Push'},{day:2,type:'pull',label:'Pull'},{day:4,type:'leg',label:'Leg'}],
+  3:[{day:0,type:'push',label:'Push'},{day:2,type:'pull',label:'Pull'},{day:4,type:'leg',label:'Leg'}],
+  4:[{day:0,type:'push',label:'Push'},{day:2,type:'pull',label:'Pull'},{day:4,type:'leg',label:'Leg'}],
+  5:[{day:0,type:'push',label:'Push'},{day:2,type:'pull',label:'Pull'},{day:4,type:'leg',label:'Leg'}],
+  6:[{day:0,type:'push',label:'Push'},{day:2,type:'pull',label:'Pull'}],
+};
+
+function initCal() {
+  const saved = load('ppl_cal', null);
+  if (saved) { calData = saved; return; }
+  for(let w=1;w<=6;w++){
+    calData[w]=Array(7).fill(null).map(()=>[]);
+    (CAL_DEFAULTS[w]||[]).forEach(s=>calData[w][s.day].push({type:s.type,label:s.label,id:uid()}));
+  }
+}
+
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  document.getElementById('bnav-'+name).classList.add('active');
+  document.getElementById('scroller').scrollTop=0;
+  if(name==='home') renderHome();
+  if(name==='cal') renderCal();
+  if(name==='carnet') renderCarnet();
+}
+
+function goHome() { showScreen('home'); }
+
+function goSeance(week, idx) {
+  currentSeance = { week, idx };
+  const s = SESSIONS[week][idx];
+  document.getElementById('stbType').textContent = s.type.toUpperCase();
+  document.getElementById('stbSub').textContent = s.day + ' — ' + s.muscles;
+  document.getElementById('stbTime').textContent = s.time;
+  document.getElementById('seanceMeta').innerHTML =
+    `<div class="sm-item">Repos : <strong>${s.repos}</strong></div>
+     <div class="sm-item">Échauffement : <strong>${s.warmup}</strong></div>`;
+
+  const exList = document.getElementById('exList');
+  exList.innerHTML = '';
+  s.exercises.forEach((ex, ei) => {
+    const key = `ppl_charge_${week}_${idx}_${ei}`;
+    const savedCharge = load(key, '');
+    const tagClass = ex.tag === 'compound' ? 'pill-compound' : ex.tag === 'iso' ? 'pill-iso' : 'pill-trail';
+    const tagLabel = ex.tag === 'compound' ? 'COMPOUND' : ex.tag === 'iso' ? 'ISOLAT.' : 'TRAIL';
+    const card = document.createElement('div');
+    card.className = 'ex-card';
+    card.innerHTML = `
+      <div class="ex-card-header">
+        <span class="ex-tag-pill ${tagClass}">${tagLabel}</span>
+        <div class="ex-name-wrap">
+          <div class="ex-name">${ex.name}</div>
+          <span class="ex-sets-badge">${ex.sets}</span>
+        </div>
+      </div>
+      <div class="ex-tip-area">
+        <button class="ex-tip-toggle" onclick="toggleTip(this)">Voir le conseil technique ↓</button>
+        <div class="ex-tip-text">${ex.tip}</div>
+      </div>
+      <div class="ex-charges">
+        <span class="ec-label">CHARGE</span>
+        <input class="ec-input" type="text" inputmode="decimal" placeholder="ex: 60 ou 2×12" value="${savedCharge}" 
+          onchange="saveCharge(${week},${idx},${ei},this.value)" 
+          onblur="saveCharge(${week},${idx},${ei},this.value)">
+        <span class="ec-unit">kg / note</span>
+      </div>`;
+    exList.appendChild(card);
+  });
+
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-seance').classList.add('active');
+  document.getElementById('bnav-home').classList.add('active');
+  document.getElementById('scroller').scrollTop=0;
+}
+
+function toggleTip(btn) {
+  const tip = btn.nextElementSibling;
+  tip.classList.toggle('open');
+  btn.textContent = tip.classList.contains('open') ? 'Masquer ↑' : 'Voir le conseil technique ↓';
+}
+
+function saveCharge(week, idx, ei, val) {
+  save(`ppl_charge_${week}_${idx}_${ei}`, val);
+}
+
+/* ═══════════════════════════════════════
+   HOME
+═══════════════════════════════════════ */
+function renderHome() {
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = '';
+  WEEKS.forEach((w,i) => {
+    const wn = i+1;
+    const card = document.createElement('div');
+    card.className = 'ws-card' + (w.deload?' deload':'') + (wn===currentWeek?' active':'');
+    card.innerHTML = `<div class="ws-week">${w.label}</div><div class="ws-phase">${w.phase}</div><div class="ws-rpe">RPE ${w.rpe}</div><div class="ws-bar"><div class="ws-fill" style="width:${w.pct}%"></div></div>`;
+    card.onclick = () => { currentWeek=wn; save('ppl_week',wn); renderHome(); };
+    grid.appendChild(card);
+  });
+
+  const wm = WEEKS[currentWeek-1];
+  document.getElementById('weekInfo').innerHTML = `<div class="wi-title">SEMAINE ${currentWeek} — ${wm.phase.toUpperCase()}</div><div class="wi-note">${wm.note}</div>`;
+  document.getElementById('topBadge').textContent = `S${currentWeek} · RPE ${wm.rpe}`;
+
+  const tiles = document.getElementById('sessionTiles');
+  tiles.innerHTML = '';
+  const sessions = SESSIONS[currentWeek] || [];
+  sessions.forEach((s, i) => {
+    const tile = document.createElement('div');
+    tile.className = `st-tile ${s.type}`;
+    tile.innerHTML = `<div class="st-stripe"></div>
+      <div class="st-body">
+        <div class="st-left">
+          <div class="st-type">${s.type.toUpperCase()}</div>
+          <div class="st-day">${s.day.toUpperCase()}</div>
+          <div class="st-muscles">${s.muscles}</div>
+        </div>
+        <div class="st-right">
+          <div class="st-time">${s.time}</div>
+          <div class="st-excount">${s.exercises.length} exercices</div>
+          <div class="st-arrow">›</div>
+        </div>
+      </div>`;
+    tile.onclick = () => goSeance(currentWeek, i);
+    tiles.appendChild(tile);
+  });
+
+  if (currentWeek === 6) {
+    const note = document.createElement('div');
+    note.style.cssText = 'margin:0 0 12px;padding:12px 14px;background:rgba(255,107,53,0.08);border-left:3px solid var(--accent2);border-radius:0 8px 8px 0;font-size:12px;color:var(--accent2);line-height:1.6;';
+    note.innerHTML = '<strong style="display:block;margin-bottom:3px">Semaine de déload trail</strong>Pas de séance Leg cette semaine. Push et Pull en volume réduit — récupère pour ta prépa trail.';
+    tiles.insertBefore(note, tiles.firstChild);
+  }
+}
+
+/* ═══════════════════════════════════════
+   CALENDRIER
+═══════════════════════════════════════ */
+const DAYS = ['L','M','M','J','V','S','D'];
+const PALETTE = [
+  {type:'push',label:'Push'},{type:'pull',label:'Pull'},{type:'leg',label:'Leg'},
+  {type:'run',label:'Course'},{type:'rest',label:'Repos'},
+];
+
+function renderCal() {
+  const nav = document.getElementById('calWeekBtns');
+  nav.innerHTML = '';
+  for(let w=1;w<=6;w++){
+    const b = document.createElement('button');
+    b.className='cwb'+(w===6?' deload':'')+(w===calWeek?' active':'');
+    b.textContent = w===6?'S6':'S'+w;
+    b.onclick=(function(ww){return function(){calWeek=ww;renderCal();};})(w);
+    nav.appendChild(b);
+  }
+  const rst = document.createElement('button');
+  rst.className='cwb'; rst.textContent='↺';
+  rst.onclick=()=>{
+    calData[calWeek]=Array(7).fill(null).map(()=>[]);
+    (CAL_DEFAULTS[calWeek]||[]).forEach(s=>calData[calWeek][s.day].push({type:s.type,label:s.label,id:uid()}));
+    save('ppl_cal',calData); renderCal();
+  };
+  nav.appendChild(rst);
+
+  document.getElementById('calDeloadMsg').className='cal-deload-msg'+(calWeek===6?' show':'');
+
+  const drow = document.getElementById('calDaysRow');
+  drow.innerHTML = DAYS.map(d=>`<div class="cdr-day">${d}</div>`).join('');
+
+  const grid = document.getElementById('calGridEl');
+  grid.innerHTML='';
+  calData[calWeek].forEach((chips,dayIdx)=>{
+    const cell = document.createElement('div');
+    cell.className='cal-cell'+(chips.length?' has-chip':'');
+    chips.forEach(chip=>{
+      const el = document.createElement('div');
+      el.className=`cal-chip chip-${chip.type}`;
+      el.draggable=true;
+      el.innerHTML=`<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${chip.label}</span><button class="cal-chip-x">✕</button>`;
+      el.querySelector('.cal-chip-x').onclick=(e)=>{e.stopPropagation();calData[calWeek][dayIdx]=calData[calWeek][dayIdx].filter(c=>c.id!==chip.id);save('ppl_cal',calData);renderCal();};
+      el.addEventListener('dragstart',()=>{calDragging=chip;calDragSrc=dayIdx;});
+      el.addEventListener('dragend',()=>{calDragging=null;calDragSrc=null;});
+      // Touch drag via long press
+      let lt;
+      el.addEventListener('touchstart',()=>{lt=setTimeout(()=>{calDragging=chip;calDragSrc=dayIdx;},300);},{passive:true});
+      el.addEventListener('touchend',()=>clearTimeout(lt),{passive:true});
+      cell.appendChild(el);
+    });
+    const add = document.createElement('button');
+    add.className='cal-add'; add.textContent='+course';
+    add.onclick=()=>{calData[calWeek][dayIdx].push({type:'run',label:'Course',id:uid()});save('ppl_cal',calData);renderCal();};
+    cell.appendChild(add);
+    cell.addEventListener('dragover',e=>{e.preventDefault();cell.classList.add('drag-over');});
+    cell.addEventListener('dragleave',()=>cell.classList.remove('drag-over'));
+    cell.addEventListener('drop',e=>{
+      e.preventDefault(); cell.classList.remove('drag-over');
+      if(!calDragging)return;
+      if(calDragSrc!==null) calData[calWeek][calDragSrc]=calData[calWeek][calDragSrc].filter(c=>c.id!==calDragging.id);
+      calData[calWeek][dayIdx].push({type:calDragging.type,label:calDragging.label,id:uid()});
+      calDragging=null;calDragSrc=null;save('ppl_cal',calData);renderCal();
+    });
+    grid.appendChild(cell);
+  });
+
+  const pal = document.getElementById('calPaletteEl');
+  pal.innerHTML='';
+  PALETTE.forEach(item=>{
+    if(calWeek===6&&item.type==='leg')return;
+    const el=document.createElement('div');
+    el.className=`cp-chip chip-${item.type}`;
+    el.textContent=item.label;
+    el.draggable=true;
+    el.addEventListener('dragstart',()=>{calDragging={type:item.type,label:item.label,id:uid()};calDragSrc=null;});
+    pal.appendChild(el);
+  });
+}
+
+/* ═══════════════════════════════════════
+   CARNET
+═══════════════════════════════════════ */
+function renderCarnet() {
+  const tabs = document.getElementById('carnetTabs');
+  tabs.innerHTML='';
+  WEEKS.forEach((_,i)=>{
+    const wn=i+1;
+    const b=document.createElement('button');
+    b.className='cwt-btn'+(wn===carnetWeek?' active':'');
+    b.textContent='S'+wn;
+    b.onclick=()=>{carnetWeek=wn;renderCarnet();};
+    tabs.appendChild(b);
+  });
+  document.getElementById('chargesWeekLabel').textContent=carnetWeek;
+  document.getElementById('carnetNote').value=load(`ppl_note_${carnetWeek}`,'');
+
+  const cgrid = document.getElementById('chargesGrid');
+  cgrid.innerHTML='';
+  const sessions = SESSIONS[carnetWeek]||[];
+  sessions.forEach((s,si)=>{
+    s.exercises.forEach((ex,ei)=>{
+      const key=`ppl_charge_${carnetWeek}_${si}_${ei}`;
+      const val=load(key,'');
+      const row=document.createElement('div');
+      row.className='cs-row';
+      row.innerHTML=`
+        <div class="cs-exname"><span style="font-family:'DM Mono',monospace;font-size:9px;color:var(--${s.type});margin-right:6px">${s.type.toUpperCase()}</span>${ex.name}</div>
+        <input class="cs-input" type="text" inputmode="decimal" placeholder="—" value="${val}"
+          onchange="saveCharge(${carnetWeek},${si},${ei},this.value)"
+          onblur="saveCharge(${carnetWeek},${si},${ei},this.value)">
+        <span class="cs-kg">kg</span>`;
+      cgrid.appendChild(row);
+    });
+  });
+}
+
+function saveNote() {
+  save(`ppl_note_${carnetWeek}`, document.getElementById('carnetNote').value);
+  const btn = document.querySelector('.save-btn');
+  btn.textContent='Enregistré ✓';
+  setTimeout(()=>btn.textContent='Enregistrer la note',1500);
+}
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+initCal();
+renderHome();
+</script>
+</body>
+</html>

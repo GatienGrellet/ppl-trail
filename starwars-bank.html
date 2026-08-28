@@ -45,6 +45,10 @@ h1,h2,h3,.num,.logo,.mono{font-family:'Orbitron',sans-serif}
   position:fixed;inset:0;width:100vw;height:100vh;z-index:-2;
   background:radial-gradient(ellipse at 50% -10%, #101522 0%, #060709 45%, #020203 100%);
 }
+#planetScene{
+  position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;
+  pointer-events:none;display:none;
+}
 #hyperspace{
   position:fixed;inset:0;width:100vw;height:100vh;z-index:9999;
   pointer-events:none;opacity:0;transition:opacity .18s ease;
@@ -201,26 +205,26 @@ header.topbar{
 }
 .planet-hero .backbtn:hover{color:var(--gold);border-color:var(--gold-dim)}
 .planet-hero .disc{width:90px;height:90px;border-radius:50%;margin:0 auto 18px;box-shadow:0 0 60px currentColor}
-.planet-hero h2{font-size:clamp(22px,4vw,34px);letter-spacing:6px}
-.planet-hero .quote{font-style:italic;color:var(--text-dim);margin-top:10px;font-size:13.5px;max-width:560px;margin-inline:auto}
+.planet-hero h2{font-size:clamp(22px,4vw,34px);letter-spacing:6px;text-shadow:0 3px 18px rgba(0,0,0,.85)}
+.planet-hero .quote{font-style:italic;color:#dfe2e8;margin-top:10px;font-size:13.5px;max-width:560px;margin-inline:auto;text-shadow:0 2px 10px rgba(0,0,0,.85)}
 .planet-content{max-width:1100px;margin:34px auto 0;padding:0 26px;display:grid;grid-template-columns:1.1fr 1fr;gap:20px}
 @media(max-width:900px){.planet-content{grid-template-columns:1fr}}
 
-.theme-tatooine .planet-hero{background:radial-gradient(ellipse at 50% 100%,rgba(217,154,78,.22),transparent 65%)}
+.theme-tatooine .planet-hero{background:linear-gradient(180deg,rgba(2,3,6,.62),rgba(2,3,6,.1) 55%,transparent),radial-gradient(ellipse at 50% 100%,rgba(217,154,78,.22),transparent 65%)}
 .theme-tatooine .disc{background:radial-gradient(circle at 32% 30%,#ffe6b0,#d99a4e 55%,#8a5a22 100%);color:#d99a4e}
-.theme-hoth .planet-hero{background:radial-gradient(ellipse at 50% 100%,rgba(191,230,255,.2),transparent 65%)}
+.theme-hoth .planet-hero{background:linear-gradient(180deg,rgba(2,3,6,.62),rgba(2,3,6,.1) 55%,transparent),radial-gradient(ellipse at 50% 100%,rgba(191,230,255,.2),transparent 65%)}
 .theme-hoth .disc{background:radial-gradient(circle at 30% 28%,#ffffff,#bfe6ff 55%,#5a90b0 100%);color:#bfe6ff}
-.theme-naboo .planet-hero{background:radial-gradient(ellipse at 50% 100%,rgba(58,215,160,.2),transparent 65%)}
+.theme-naboo .planet-hero{background:linear-gradient(180deg,rgba(2,3,6,.62),rgba(2,3,6,.1) 55%,transparent),radial-gradient(ellipse at 50% 100%,rgba(58,215,160,.2),transparent 65%)}
 .theme-naboo .disc{background:radial-gradient(circle at 34% 30%,#c7fff0,#3ad7a0 55%,#1b6b52 100%);color:#3ad7a0}
-.theme-endor .planet-hero{background:radial-gradient(ellipse at 50% 100%,rgba(90,154,74,.22),transparent 65%)}
+.theme-endor .planet-hero{background:linear-gradient(180deg,rgba(2,3,6,.62),rgba(2,3,6,.1) 55%,transparent),radial-gradient(ellipse at 50% 100%,rgba(90,154,74,.22),transparent 65%)}
 .theme-endor .disc{background:radial-gradient(circle at 32% 30%,#c8e6a8,#5a9a4a 55%,#2f4a20 100%);color:#5a9a4a}
-.theme-mustafar .planet-hero{background:radial-gradient(ellipse at 50% 100%,rgba(224,57,47,.28),transparent 65%)}
+.theme-mustafar .planet-hero{background:linear-gradient(180deg,rgba(2,3,6,.62),rgba(2,3,6,.1) 55%,transparent),radial-gradient(ellipse at 50% 100%,rgba(224,57,47,.28),transparent 65%)}
 .theme-mustafar .disc{background:radial-gradient(circle at 30% 28%,#ffb066,#e0392f 50%,#2b0d05 100%);color:#e0392f}
-.theme-dagobah .planet-hero{background:radial-gradient(ellipse at 50% 100%,rgba(74,90,52,.25),transparent 65%)}
+.theme-dagobah .planet-hero{background:linear-gradient(180deg,rgba(2,3,6,.62),rgba(2,3,6,.1) 55%,transparent),radial-gradient(ellipse at 50% 100%,rgba(74,90,52,.25),transparent 65%)}
 .theme-dagobah .disc{background:radial-gradient(circle at 32% 30%,#a9c98a,#4a5a34 55%,#1f2716 100%);color:#7a8b5a}
-.theme-kamino .planet-hero{background:radial-gradient(ellipse at 50% 100%,rgba(77,122,153,.22),transparent 65%)}
+.theme-kamino .planet-hero{background:linear-gradient(180deg,rgba(2,3,6,.62),rgba(2,3,6,.1) 55%,transparent),radial-gradient(ellipse at 50% 100%,rgba(77,122,153,.22),transparent 65%)}
 .theme-kamino .disc{background:radial-gradient(circle at 30% 28%,#dff2ff,#4d7a99 55%,#1c2f3d 100%);color:#4d7a99}
-.theme-deathstar .planet-hero{background:radial-gradient(ellipse at 50% 100%,rgba(150,155,165,.2),transparent 65%)}
+.theme-deathstar .planet-hero{background:linear-gradient(180deg,rgba(2,3,6,.62),rgba(2,3,6,.1) 55%,transparent),radial-gradient(ellipse at 50% 100%,rgba(150,155,165,.2),transparent 65%)}
 .theme-deathstar .disc{background:radial-gradient(circle at 30% 30%,#c7ccd4,#8a8f99 55%,#3a3d42 100%);color:#8a8f99;position:relative}
 .theme-deathstar .disc::after{content:'';position:absolute;top:32%;left:0;right:0;height:2px;background:rgba(20,20,22,.7)}
 
@@ -308,6 +312,7 @@ footer.legal{max-width:1280px;margin:0 auto;padding:20px 26px 50px;text-align:ce
 <body>
 
 <canvas id="starfield"></canvas>
+<canvas id="planetScene"></canvas>
 <canvas id="hyperspace"></canvas>
 
 <!-- Opening crawl -->
@@ -1142,7 +1147,276 @@ function switchView(id){
   const target = id==='dashboard' ? 'view-dashboard' : 'view-'+id;
   document.getElementById(target).classList.add('active');
   window.scrollTo(0,0);
+  setPlanetScene(id);
 }
+
+/* ============================================================
+   PLANET SURFACE BACKDROPS — procedural landscape per world
+============================================================ */
+const SCENES = {
+  epargne: { // Tatooine — desert dunes, twin suns
+    sky:['#2b1608','#7a4a1f','#d99a4e','#ffe6b0'],
+    ground:['#c98f4a','#5a3814'],
+    ridges:[{h:.3,rough:.55,c:'rgba(60,34,14,.5)'},{h:.48,rough:.7,c:'rgba(35,20,9,.78)'}],
+    suns:[{x:.3,y:.4,r:30,c:'#fff2c2'},{x:.42,y:.45,r:18,c:'#ffcf6b'}],
+    particles:{type:'dust', n:34, color:'214,170,110'}
+  },
+  cartes: { // Hoth — ice plains, jagged peaks
+    sky:['#0b1f2e','#294b63','#a9d3e8','#eaf7ff'],
+    ground:['#eaf7ff','#9fc3d6'],
+    ridges:[{h:.3,rough:.42,c:'rgba(159,195,214,.5)'},{h:.48,rough:.55,c:'rgba(101,140,163,.8)'}],
+    suns:[{x:.76,y:.2,r:22,c:'#fff9ef'}],
+    particles:{type:'snow', n:90, color:'255,255,255'}
+  },
+  virements: { // Naboo — soft green plains, warm sun
+    sky:['#052018','#0f4a3a','#2e9c78','#bdf0da'],
+    ground:['#3a8a63','#0e3524'],
+    ridges:[{h:.3,rough:.48,c:'rgba(18,66,50,.5)'},{h:.48,rough:.6,c:'rgba(9,40,30,.8)'}],
+    suns:[{x:.7,y:.22,r:22,c:'#fff3c4'}],
+    particles:{type:'pollen', n:30, color:'220,255,235'}
+  },
+  placements: { // Endor — forest moon, gas giant overhead
+    sky:['#0a1206','#1f3312','#3c5a22','#7c9a52'],
+    ground:['#243b14','#0c1608'],
+    ridges:[{h:.26,rough:.65,c:'rgba(24,38,14,.55)'},{h:.52,rough:.8,c:'rgba(10,18,7,.85)'}],
+    moon:{x:.78,y:.2,r:26,c:'#7fa9c9',ring:true},
+    particles:{type:'leaves', n:22, color:'150,190,90'}
+  },
+  credits: { // Mustafar — volcanic wasteland
+    sky:['#1a0402','#4a0f04','#c23a1e','#ff9a4d'],
+    ground:['#3a0f04','#160401'],
+    ridges:[{h:.28,rough:.7,c:'rgba(50,14,6,.55)'},{h:.5,rough:.8,c:'rgba(20,6,2,.85)'}],
+    lava:true,
+    particles:{type:'embers', n:32, color:'255,140,60'}
+  },
+  historique: { // Dagobah — misty swamp
+    sky:['#050c06','#0e1c10','#1c2f16','#2c3f1e'],
+    ground:['#152a16','#050a05'],
+    ridges:[{h:.26,rough:.6,c:'rgba(15,26,13,.55)'},{h:.48,rough:.72,c:'rgba(6,12,6,.85)'}],
+    fog:true,
+    particles:{type:'fireflies', n:16, color:'170,230,140'}
+  },
+  securite: { deathstar:true, particles:{type:'sparks', n:22, color:'255,150,110'} }, // Death Star trench
+  assurances: { // Kamino — stormy ocean platforms
+    sky:['#0a141c','#12293a','#264b63','#3d6a84'],
+    ground:['#1a3446','#081420'],
+    ridges:[{h:.28,rough:.3,c:'rgba(20,50,66,.55)'},{h:.46,rough:.35,c:'rgba(10,28,38,.85)'}],
+    rain:true,
+    particles:{type:'rain', n:60, color:'190,220,235'}
+  },
+};
+
+const psCanvas = document.getElementById('planetScene');
+const psCtx = psCanvas.getContext('2d');
+let psW=0, psH=0, currentScene=null, sceneBitmap=null, sceneParticles=[];
+function resizePlanetScene(){
+  psW = psCanvas.width = innerWidth;
+  psH = psCanvas.height = innerHeight;
+  if (currentScene) buildScene(currentScene);
+}
+resizePlanetScene();
+addEventListener('resize', resizePlanetScene);
+
+function lerp(a,b,t){ return a+(b-a)*t; }
+function hashId(id){ let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))|0; return Math.abs(h)||1; }
+function seededRand(seed){ let s=seed%2147483647; if (s<=0) s+=2147483646; return ()=>{ s=s*16807%2147483647; return (s-1)/2147483646; }; }
+function buildRidgeLine(seed, w, amp, rough){
+  const rnd = seededRand(seed);
+  const n = Math.max(2, Math.ceil(w));
+  const arr = new Float32Array(n+1);
+  arr[0] = amp*(0.5+(rnd()-0.5)*0.4);
+  arr[n] = amp*(0.5+(rnd()-0.5)*0.4);
+  (function subdivide(lo,hi,disp){
+    if (hi-lo<2) return;
+    const mid = (lo+hi)>>1;
+    arr[mid] = (arr[lo]+arr[hi])/2 + (rnd()-0.5)*disp;
+    subdivide(lo,mid,disp*rough); subdivide(mid,hi,disp*rough);
+  })(0,n,amp*0.9);
+  return arr;
+}
+
+function drawNaturalScene(ctx, w, h, cfg, id){
+  const sky = ctx.createLinearGradient(0,0,0,h);
+  cfg.sky.forEach((c,i)=> sky.addColorStop(i/(cfg.sky.length-1), c));
+  ctx.fillStyle = sky; ctx.fillRect(0,0,w,h);
+
+  (cfg.suns||[]).forEach(s=>{
+    const cx=s.x*w, cy=s.y*h;
+    const glow = ctx.createRadialGradient(cx,cy,0,cx,cy,s.r*4.2);
+    glow.addColorStop(0, s.c+'99'); glow.addColorStop(1, s.c+'00');
+    ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(cx,cy,s.r*4.2,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=s.c; ctx.beginPath(); ctx.arc(cx,cy,s.r,0,Math.PI*2); ctx.fill();
+  });
+  if (cfg.moon){
+    const m=cfg.moon, cx=m.x*w, cy=m.y*h;
+    const glow = ctx.createRadialGradient(cx,cy,0,cx,cy,m.r*2.4);
+    glow.addColorStop(0, m.c+'55'); glow.addColorStop(1, m.c+'00');
+    ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(cx,cy,m.r*2.4,0,Math.PI*2); ctx.fill();
+    if (m.ring){
+      ctx.strokeStyle=m.c+'99'; ctx.lineWidth=Math.max(2,m.r*0.12);
+      ctx.beginPath(); ctx.ellipse(cx,cy,m.r*1.9,m.r*0.5,-0.32,0,Math.PI*2); ctx.stroke();
+    }
+    ctx.fillStyle=m.c; ctx.beginPath(); ctx.arc(cx,cy,m.r,0,Math.PI*2); ctx.fill();
+  }
+
+  cfg.ridges.forEach((r,i)=>{
+    const amp = h*r.h;
+    const arr = buildRidgeLine(hashId(id)+i*991+1, w, amp, r.rough);
+    ctx.beginPath(); ctx.moveTo(0,h);
+    for (let x=0;x<arr.length;x++) ctx.lineTo(x, h-arr[x]);
+    ctx.lineTo(w,h); ctx.closePath();
+    ctx.fillStyle = r.c; ctx.fill();
+  });
+
+  const gg = ctx.createLinearGradient(0,h*0.8,0,h);
+  gg.addColorStop(0, cfg.ground[0]); gg.addColorStop(1, cfg.ground[1]);
+  ctx.fillStyle = gg; ctx.fillRect(0, h*0.8, w, h*0.2);
+
+  if (cfg.lava){
+    for (let i=0;i<7;i++){
+      const x = (i+0.5)/7*w + Math.sin(i*3)*30, y = h*(0.86+0.1*Math.random());
+      const g = ctx.createRadialGradient(x,y,0,x,y,26);
+      g.addColorStop(0,'rgba(255,150,60,.8)'); g.addColorStop(1,'rgba(255,80,20,0)');
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,26,0,Math.PI*2); ctx.fill();
+    }
+  }
+  if (cfg.fog){
+    const fg = ctx.createLinearGradient(0,h*0.55,0,h*0.92);
+    fg.addColorStop(0,'rgba(180,200,180,0)'); fg.addColorStop(1,'rgba(180,200,180,.18)');
+    ctx.fillStyle=fg; ctx.fillRect(0,h*0.55,w,h*0.4);
+  }
+  if (cfg.rain){
+    const rg = ctx.createLinearGradient(0,0,0,h*0.5);
+    rg.addColorStop(0,'rgba(255,255,255,.06)'); rg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=rg; ctx.fillRect(0,0,w,h*0.5);
+  }
+
+  const vg = ctx.createRadialGradient(w/2,h*0.5,h*0.2, w/2,h*0.5,h*0.95);
+  vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,.5)');
+  ctx.fillStyle=vg; ctx.fillRect(0,0,w,h);
+}
+
+function drawDeathStarTrench(ctx, w, h){
+  ctx.fillStyle = '#03050a'; ctx.fillRect(0,0,w,h);
+  const vx = w*0.5, vy = h*0.4, vw = w*0.045, vh = h*0.05;
+  const c = {
+    TL:{x0:0,y0:0, x1:vx-vw,y1:vy-vh}, TR:{x0:w,y0:0, x1:vx+vw,y1:vy-vh},
+    BR:{x0:w,y0:h, x1:vx+vw,y1:vy+vh}, BL:{x0:0,y0:h, x1:vx-vw,y1:vy+vh},
+  };
+  const at = (p,t)=>({x:lerp(p.x0,p.x1,t), y:lerp(p.y0,p.y1,t)});
+  function quad(c1,c2,t0,t1,fill){
+    const a=at(c1,t0), b=at(c2,t0), cc=at(c2,t1), d=at(c1,t1);
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.lineTo(cc.x,cc.y); ctx.lineTo(d.x,d.y); ctx.closePath();
+    ctx.fillStyle=fill; ctx.fill();
+  }
+  quad(c.TL,c.TR,0,0.97,'#161a20');
+  quad(c.BL,c.BR,0,0.97,'#22262c');
+  quad(c.TL,c.BL,0,0.97,'#2c3038');
+  quad(c.TR,c.BR,0,0.97,'#20232a');
+
+  ctx.strokeStyle='rgba(190,200,215,.16)'; ctx.lineWidth=1.4;
+  [0.12,0.28,0.45,0.62,0.8].forEach(t=>{
+    const tl=at(c.TL,t), tr=at(c.TR,t), br=at(c.BR,t), bl=at(c.BL,t);
+    ctx.beginPath(); ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.lineTo(br.x,br.y); ctx.lineTo(bl.x,bl.y); ctx.closePath(); ctx.stroke();
+    ctx.fillStyle='rgba(255,140,110,.55)';
+    ctx.beginPath(); ctx.arc(tl.x,tl.y,1.6,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(tr.x,tr.y,1.6,0,Math.PI*2); ctx.fill();
+  });
+
+  const g = ctx.createRadialGradient(vx,vy,0,vx,vy,70);
+  g.addColorStop(0,'rgba(255,110,80,.85)'); g.addColorStop(.4,'rgba(255,70,40,.35)'); g.addColorStop(1,'rgba(255,70,40,0)');
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(vx,vy,70,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#ffdcc8'; ctx.beginPath(); ctx.arc(vx,vy,9,0,Math.PI*2); ctx.fill();
+
+  const vg = ctx.createRadialGradient(w/2,h/2,h*0.2, w/2,h/2,h*0.9);
+  vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,.6)');
+  ctx.fillStyle=vg; ctx.fillRect(0,0,w,h);
+}
+
+function makeParticle(type, w, h){
+  const base = { type, x:Math.random()*w, y:Math.random()*h };
+  switch(type){
+    case 'snow': return {...base, vy:0.4+Math.random()*0.8, vx:(Math.random()-0.5)*0.3, r:1+Math.random()*2, ph:Math.random()*Math.PI*2};
+    case 'dust': return {...base, vy:(Math.random()-0.5)*0.1, vx:0.15+Math.random()*0.3, r:0.6+Math.random()*1.4, a:0.15+Math.random()*0.3};
+    case 'embers': return {...base, y:h*0.6+Math.random()*h*0.4, vy:-(0.3+Math.random()*0.6), vx:(Math.random()-0.5)*0.3, r:1+Math.random()*2, life:Math.random()};
+    case 'pollen': return {...base, vy:-(0.1+Math.random()*0.2), vx:(Math.random()-0.5)*0.15, r:0.8+Math.random()*1.4, ph:Math.random()*Math.PI*2};
+    case 'leaves': return {...base, vy:0.3+Math.random()*0.5, vx:(Math.random()-0.5)*0.4, r:2+Math.random()*2, rot:Math.random()*Math.PI, vr:(Math.random()-0.5)*0.05};
+    case 'fireflies': return {...base, y:h*0.55+Math.random()*h*0.4, vy:(Math.random()-0.5)*0.15, vx:(Math.random()-0.5)*0.15, r:1.2+Math.random(), ph:Math.random()*Math.PI*2};
+    case 'sparks': return {...base, r:0.8+Math.random()*1.6, ph:Math.random()*Math.PI*2};
+    case 'rain': return {...base, vy:6+Math.random()*4, vx:-1.5-Math.random(), len:10+Math.random()*10};
+    default: return base;
+  }
+}
+function stepParticles(list, w, h){
+  list.forEach(p=>{
+    if (p.type==='snow'){ p.ph+=0.02; p.x+=p.vx+Math.sin(p.ph)*0.3; p.y+=p.vy; }
+    else if (p.type==='dust'){ p.x+=p.vx; p.y+=p.vy; }
+    else if (p.type==='embers'){ p.x+=p.vx; p.y+=p.vy; p.life-=0.004; }
+    else if (p.type==='pollen'){ p.ph+=0.02; p.x+=p.vx+Math.sin(p.ph)*0.2; p.y+=p.vy; }
+    else if (p.type==='leaves'){ p.x+=p.vx+Math.sin(p.rot)*0.3; p.y+=p.vy; p.rot+=p.vr; }
+    else if (p.type==='fireflies'){ p.ph+=0.03; p.x+=p.vx+Math.sin(p.ph)*0.2; p.y+=p.vy+Math.cos(p.ph*0.7)*0.15; }
+    else if (p.type==='sparks'){ p.ph+=0.15; if (Math.random()<0.01){ p.x=Math.random()*w; p.y=Math.random()*h; } }
+    else if (p.type==='rain'){ p.x+=p.vx; p.y+=p.vy; }
+
+    const dead = p.y>h+15 || p.y<-15 || p.x<-25 || p.x>w+25 || (p.type==='embers' && p.life<=0);
+    if (dead) Object.assign(p, makeParticle(p.type, w, h));
+  });
+}
+function drawParticles(ctx, list, color){
+  list.forEach(p=>{
+    if (p.type==='rain'){
+      ctx.strokeStyle=`rgba(${color},.5)`; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p.x+p.vx*1.4, p.y-p.len); ctx.stroke();
+      return;
+    }
+    if (p.type==='leaves'){
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle=`rgba(${color},.75)`; ctx.fillRect(-p.r,-p.r*0.5,p.r*2,p.r); ctx.restore();
+      return;
+    }
+    let a = p.a!==undefined ? p.a : 0.7;
+    if (p.type==='embers') a = Math.max(0,p.life);
+    if (p.type==='fireflies' || p.type==='sparks') a = 0.15+0.55*Math.abs(Math.sin(p.ph));
+    ctx.fillStyle = `rgba(${color},${a.toFixed(2)})`;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+  });
+}
+
+function buildScene(id){
+  currentScene = id;
+  const cfg = SCENES[id];
+  if (!cfg || psW<2 || psH<2){ sceneBitmap=null; sceneParticles=[]; return; }
+  const off = document.createElement('canvas');
+  off.width = psW; off.height = psH;
+  const octx = off.getContext('2d');
+  if (cfg.deathstar) drawDeathStarTrench(octx, psW, psH);
+  else drawNaturalScene(octx, psW, psH, cfg, id);
+  sceneBitmap = off;
+  sceneParticles = cfg.particles ? Array.from({length:cfg.particles.n}, ()=>makeParticle(cfg.particles.type, psW, psH)) : [];
+}
+
+function setPlanetScene(id){
+  if (id==='dashboard' || !SCENES[id]){
+    psCanvas.style.display='none';
+    currentScene=null;
+    return;
+  }
+  psCanvas.style.display='block';
+  buildScene(id);
+}
+
+function loopPlanetScene(){
+  requestAnimationFrame(loopPlanetScene);
+  if (!currentScene || psCanvas.style.display==='none') return;
+  const cfg = SCENES[currentScene];
+  psCtx.clearRect(0,0,psW,psH);
+  if (sceneBitmap) psCtx.drawImage(sceneBitmap,0,0,psW,psH);
+  if (cfg && cfg.particles){
+    stepParticles(sceneParticles, psW, psH);
+    drawParticles(psCtx, sceneParticles, cfg.particles.color);
+  }
+}
+loopPlanetScene();
 
 /* ============================================================
    BACKGROUND STARFIELD + SHIP BATTLE ANIMATION

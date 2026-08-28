@@ -89,7 +89,7 @@ header.topbar{
 .icon-btn{
   width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--panel);
   display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-dim);
-  transition:all .2s;
+  transition:all .28s cubic-bezier(.22,1,.36,1);
 }
 .icon-btn:hover{color:var(--gold);border-color:var(--gold-dim);box-shadow:0 0 12px var(--gold-dim)}
 
@@ -122,7 +122,7 @@ header.topbar{
 .summary-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
 .btn{
   padding:10px 18px;border-radius:9px;font-weight:700;font-size:12.5px;letter-spacing:1.2px;text-transform:uppercase;
-  border:1px solid var(--border);background:rgba(255,255,255,.03);transition:all .2s;
+  border:1px solid var(--border);background:rgba(255,255,255,.03);transition:all .28s cubic-bezier(.22,1,.36,1);
 }
 .btn:hover{border-color:var(--gold-dim);box-shadow:0 0 14px var(--gold-dim);transform:translateY(-1px)}
 .btn.primary{background:linear-gradient(135deg,var(--gold),#c9a800);color:#241f00;border:none}
@@ -162,63 +162,30 @@ header.topbar{
 .galaxy-wrap .heading p{font-size:12.5px;color:var(--text-dim);margin-top:6px;letter-spacing:.5px}
 .galaxy{
   position:relative;width:100%;
-  height:min(78vmin,720px);
+  height:min(80vmin,760px);
   margin:20px auto 10px;
-  display:flex;align-items:center;justify-content:center;
+  border-radius:var(--radius);
+  overflow:hidden;
+  background:radial-gradient(ellipse at 50% 42%, rgba(22,26,38,.6), rgba(5,6,8,.1) 72%);
+  border:1px solid var(--border);
 }
-.hq{
-  position:relative;z-index:5;width:96px;height:96px;border-radius:50%;
-  background:radial-gradient(circle at 32% 28%,#fff9d6,var(--gold) 42%,#7a6600 100%);
-  box-shadow:0 0 50px rgba(255,232,31,.45),0 0 120px rgba(255,232,31,.15);
-  display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;
-  animation:pulseHQ 5s ease-in-out infinite;
+#galaxy3d{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;display:block}
+.g3d-hint{
+  position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
+  font-size:10.5px;letter-spacing:1px;color:var(--text-dim);
+  background:rgba(5,6,8,.55);border:1px solid var(--border);padding:6px 14px;border-radius:999px;
+  pointer-events:none;opacity:.85;transition:opacity .5s ease;
 }
-@keyframes pulseHQ{0%,100%{box-shadow:0 0 50px rgba(255,232,31,.45),0 0 120px rgba(255,232,31,.15)}50%{box-shadow:0 0 70px rgba(255,232,31,.65),0 0 160px rgba(255,232,31,.25)}}
-.hq span{font-family:'Orbitron';font-size:9px;letter-spacing:1px;color:#241f00;font-weight:800;line-height:1.3}
-
-.orbit{position:absolute;top:50%;left:50%;width:0;height:0}
-.orbit-track{
-  position:absolute;top:0;left:0;border:1px dashed rgba(255,255,255,.08);border-radius:50%;
-  transform:translate(-50%,-50%);
+.g3d-hint.faded{opacity:0}
+.g3d-tooltip{
+  position:absolute;top:0;left:0;transform:translate(-50%,-140%);
+  padding:6px 12px;border-radius:9px;background:rgba(6,7,10,.85);
+  border:1px solid var(--tooltip-c,var(--gold-dim));font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s ease;z-index:6;
+  box-shadow:0 6px 20px rgba(0,0,0,.5);
 }
-.orbit-spin{position:absolute;top:0;left:0;width:0;height:0;animation:spin linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-.planet-btn{
-  position:absolute;top:0;left:0;transform:translate(-50%,-50%);
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  animation:spin linear infinite reverse;
-}
-.planet-core{
-  border-radius:50%;position:relative;
-  box-shadow:0 0 0 rgba(0,0,0,0), inset -6px -6px 14px rgba(0,0,0,.5);
-  transition:transform .25s ease, box-shadow .25s ease;
-}
-.planet-btn:hover .planet-core{transform:scale(1.14)}
-.planet-btn .plabel{
-  font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;
-  background:rgba(5,6,8,.7);padding:3px 9px;border-radius:999px;border:1px solid var(--border);
-  white-space:nowrap;opacity:.85;transition:opacity .2s;
-}
-.planet-btn .plabel small{display:block;font-size:8.5px;color:var(--text-dim);letter-spacing:1px;text-align:center}
-.planet-btn:hover .plabel{opacity:1;border-color:var(--gold-dim)}
-
-/* individual planet color treatments */
-.p-tatooine .planet-core{width:34px;height:34px;background:radial-gradient(circle at 32% 30%,#ffe6b0,#d99a4e 55%,#8a5a22 100%);box-shadow:0 0 20px rgba(217,154,78,.5),inset -6px -6px 14px rgba(0,0,0,.5)}
-.p-hoth .planet-core{width:30px;height:30px;background:radial-gradient(circle at 30% 28%,#ffffff,#bfe6ff 55%,#5a90b0 100%);box-shadow:0 0 22px rgba(191,230,255,.55),inset -6px -6px 14px rgba(0,0,0,.4)}
-.p-naboo .planet-core{width:32px;height:32px;background:radial-gradient(circle at 34% 30%,#c7fff0,#3ad7a0 55%,#1b6b52 100%);box-shadow:0 0 22px rgba(58,215,160,.5),inset -6px -6px 14px rgba(0,0,0,.5)}
-.p-endor .planet-core{width:22px;height:22px;background:radial-gradient(circle at 32% 30%,#c8e6a8,#5a9a4a 55%,#2f4a20 100%);box-shadow:0 0 16px rgba(90,154,74,.5),inset -4px -4px 10px rgba(0,0,0,.5)}
-.p-mustafar .planet-core{width:30px;height:30px;background:radial-gradient(circle at 30% 28%,#ffb066,#e0392f 50%,#2b0d05 100%);box-shadow:0 0 24px rgba(255,90,40,.55),inset -6px -6px 14px rgba(0,0,0,.5)}
-.p-dagobah .planet-core{width:24px;height:24px;background:radial-gradient(circle at 32% 30%,#a9c98a,#4a5a34 55%,#1f2716 100%);box-shadow:0 0 14px rgba(74,90,52,.5),inset -4px -4px 10px rgba(0,0,0,.5)}
-.p-kamino .planet-core{width:28px;height:28px;background:radial-gradient(circle at 30% 28%,#dff2ff,#4d7a99 55%,#1c2f3d 100%);box-shadow:0 0 20px rgba(77,122,153,.55),inset -5px -5px 12px rgba(0,0,0,.5)}
-.p-deathstar .planet-core{
-  width:26px;height:26px;border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,#c7ccd4,#8a8f99 55%,#3a3d42 100%);
-  box-shadow:0 0 18px rgba(150,155,165,.45),inset -5px -5px 12px rgba(0,0,0,.5);
-  position:relative;
-}
-.p-deathstar .planet-core::after{content:'';position:absolute;top:32%;left:-2px;right:-2px;height:2px;background:rgba(20,20,22,.65)}
-.p-deathstar .planet-core::before{content:'';position:absolute;top:22%;left:22%;width:7px;height:7px;border-radius:50%;background:rgba(20,20,22,.5);box-shadow:inset 1px 1px 2px rgba(255,60,60,.4)}
+.g3d-tooltip.show{opacity:1}
+.g3d-tooltip small{display:block;color:var(--text-dim);font-size:9px;letter-spacing:1.5px;margin-top:2px;text-transform:uppercase}
 
 /* ============ PLANET PAGES ============ */
 .planet-page{min-height:calc(100vh - 68px);position:relative;padding:0 0 90px}
@@ -230,7 +197,7 @@ header.topbar{
   position:absolute;top:22px;left:26px;display:inline-flex;align-items:center;gap:8px;
   font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);
   border:1px solid var(--border);padding:8px 14px;border-radius:999px;background:rgba(5,6,8,.5);
-  transition:all .2s;
+  transition:all .28s cubic-bezier(.22,1,.36,1);
 }
 .planet-hero .backbtn:hover{color:var(--gold);border-color:var(--gold-dim)}
 .planet-hero .disc{width:90px;height:90px;border-radius:50%;margin:0 auto 18px;box-shadow:0 0 60px currentColor}
@@ -267,8 +234,8 @@ header.topbar{
 .field input:focus,.field select:focus{outline:none;border-color:var(--gold-dim);box-shadow:0 0 0 3px rgba(255,232,31,.08)}
 .progress{height:10px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:8px}
 .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--gold))}
-.toggle{position:relative;width:46px;height:26px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid var(--border);transition:.2s}
-.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.toggle{position:relative;width:46px;height:26px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid var(--border);transition:.3s cubic-bezier(.22,1,.36,1)}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.3s cubic-bezier(.22,1,.36,1)}
 .toggle.on{background:var(--green)}
 .toggle.on::after{left:22px}
 .badge{display:inline-block;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:999px;font-weight:700}
@@ -457,7 +424,11 @@ footer.legal{max-width:1280px;margin:0 auto;padding:20px 26px 50px;text-align:ce
         <h2>SYSTÈME BANCAIRE</h2>
         <p>Sélectionnez une planète pour engager le saut en hyperespace vers ce service</p>
       </div>
-      <div class="galaxy" id="galaxy"></div>
+      <div class="galaxy" id="galaxy">
+        <canvas id="galaxy3d"></canvas>
+        <div class="g3d-tooltip" id="g3dTooltip"></div>
+        <div class="g3d-hint">🖱️ Glisser pour orbiter · Molette pour zoomer</div>
+      </div>
     </div>
 
     <footer class="legal">Banque Galactique est un site de démonstration fictif à but créatif — aucune donnée réelle n'est traitée. « Que la Force (des intérêts composés) soit avec vous. »</footer>
@@ -814,33 +785,282 @@ function quickToast(msg){
 }
 
 /* ============================================================
-   GALAXY MAP BUILD
+   3D GALAXY MAP — orbit-camera solar system you can drag/zoom
 ============================================================ */
-const PLANETS = [
-  {id:'epargne',   cls:'p-tatooine',  name:'Tatooine', sub:'Épargne',      r:120, dur:34},
-  {id:'cartes',    cls:'p-hoth',      name:'Hoth',     sub:'Cartes',       r:165, dur:42},
-  {id:'virements', cls:'p-naboo',     name:'Naboo',    sub:'Virements',    r:210, dur:50},
-  {id:'placements',cls:'p-endor',     name:'Endor',    sub:'Placements',   r:250, dur:58},
-  {id:'credits',   cls:'p-mustafar',  name:'Mustafar', sub:'Crédits',      r:290, dur:66},
-  {id:'historique',cls:'p-dagobah',   name:'Dagobah',  sub:'Historique',   r:325, dur:74},
-  {id:'securite',  cls:'p-deathstar', name:'Étoile Noire', sub:'Sécurité', r:358, dur:82},
-  {id:'assurances',cls:'p-kamino',    name:'Kamino',   sub:'Assurances',   r:388, dur:90},
+const PLANET_DEFS = [
+  {id:'epargne',    name:'Tatooine',     sub:'Épargne',      radius:9.5, orbit:70,  speed:0.075, incline:0.05,  phase:0.3, base:'#7a4d1c', mid:'#d99a4e', hi:'#ffe6b0', glow:'217,154,78'},
+  {id:'cartes',     name:'Hoth',         sub:'Cartes',       radius:8.2, orbit:96,  speed:0.058, incline:-0.09, phase:2.1, base:'#4c7d9c', mid:'#bfe6ff', hi:'#ffffff', glow:'191,230,255'},
+  {id:'virements',  name:'Naboo',        sub:'Virements',    radius:8.8, orbit:122, speed:0.047, incline:0.11,  phase:4.0, base:'#155c47', mid:'#3ad7a0', hi:'#c7fff0', glow:'58,215,160'},
+  {id:'placements', name:'Endor',        sub:'Placements',   radius:6.2, orbit:148, speed:0.039, incline:-0.16, phase:1.2, base:'#2b4319', mid:'#5a9a4a', hi:'#c8e6a8', glow:'90,154,74'},
+  {id:'credits',    name:'Mustafar',     sub:'Crédits',      radius:8.4, orbit:174, speed:0.033, incline:0.13,  phase:5.4, base:'#3a1006', mid:'#e0392f', hi:'#ffb066', glow:'255,90,40'},
+  {id:'historique', name:'Dagobah',      sub:'Historique',   radius:6.6, orbit:200, speed:0.028, incline:-0.07, phase:3.3, base:'#1a2112', mid:'#4a5a34', hi:'#a9c98a', glow:'130,150,100'},
+  {id:'securite',   name:'Étoile Noire', sub:'Sécurité',     radius:7.2, orbit:226, speed:0.024, incline:0.19,  phase:0.8, base:'#26282c', mid:'#8a8f99', hi:'#c7ccd4', glow:'160,165,175', deathstar:true},
+  {id:'assurances', name:'Kamino',       sub:'Assurances',   radius:7.6, orbit:252, speed:0.021, incline:-0.12, phase:6.0, base:'#16232e', mid:'#4d7a99', hi:'#dff2ff', glow:'77,122,153'},
 ];
-const galaxy = document.getElementById('galaxy');
-PLANETS.forEach((p,i)=>{
-  const scale = Math.min(1, (galaxy.clientHeight||600)/840);
-  const orbit = document.createElement('div');
-  orbit.className='orbit';
-  orbit.innerHTML = `
-    <div class="orbit-track" style="width:${p.r*2}px;height:${p.r*2}px"></div>
-    <div class="orbit-spin" style="animation-duration:${p.dur}s;animation-delay:-${i*7}s">
-      <button class="planet-btn ${p.cls}" style="left:${p.r}px;animation-duration:${p.dur}s;animation-delay:-${i*7}s" onclick="goToPlanet('${p.id}')">
-        <span class="planet-core"></span>
-        <span class="plabel">${p.name}<small>${p.sub}</small></span>
-      </button>
-    </div>`;
-  galaxy.appendChild(orbit);
+const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const g3dCanvas = document.getElementById('galaxy3d');
+const g3dWrap = g3dCanvas.parentElement;
+const gctx = g3dCanvas.getContext('2d');
+const g3dTooltip = document.getElementById('g3dTooltip');
+const g3dHint = document.querySelector('.g3d-hint');
+
+const g3dClock0 = performance.now();
+const nowSec = () => (performance.now()-g3dClock0)/1000 * (REDUCED_MOTION ? 0.15 : 1);
+
+const cam = { theta:0.7, phi:1.15, dist:430, targetDist:430, vTheta:0, vPhi:0 };
+const CAM_DEFAULT = { phi:1.15, dist:430 };
+const CAM_MIN_DIST = 105, CAM_MAX_DIST = 680;
+function clampPhi(p){ return Math.max(0.28, Math.min(Math.PI-0.28, p)); }
+function normAngle(a){ return ((a+Math.PI)%(Math.PI*2)+Math.PI*2)%(Math.PI*2)-Math.PI; }
+
+let cssW=0, cssH=0;
+function resizeG3D(){
+  const rect = g3dWrap.getBoundingClientRect();
+  if (rect.width<10 || rect.height<10) return false;
+  if (Math.abs(rect.width-cssW)<0.5 && Math.abs(rect.height-cssH)<0.5) return true;
+  const dpr = Math.min(devicePixelRatio||1, 2);
+  cssW = rect.width; cssH = rect.height;
+  g3dCanvas.width = Math.round(cssW*dpr);
+  g3dCanvas.height = Math.round(cssH*dpr);
+  gctx.setTransform(dpr,0,0,dpr,0,0);
+  return true;
+}
+resizeG3D();
+
+let g3dDragging=false, g3dLastX=0, g3dLastY=0, g3dDownT=0, g3dMoved=0;
+let g3dMouseX=-9999, g3dMouseY=-9999, g3dMouseIn=false, g3dHovered=null;
+let g3dLastInteraction = performance.now();
+const g3dPointers = new Map();
+
+function g3dTouched(){ g3dLastInteraction = performance.now(); g3dHint.classList.add('faded'); }
+
+g3dCanvas.addEventListener('pointerdown', e=>{
+  g3dPointers.set(e.pointerId, {x:e.clientX,y:e.clientY});
+  g3dTouched();
+  if (g3dPointers.size===1){
+    g3dDragging=true; g3dLastX=e.clientX; g3dLastY=e.clientY; g3dDownT=performance.now(); g3dMoved=0;
+    cam.vTheta=0; cam.vPhi=0;
+    g3dCanvas.setPointerCapture(e.pointerId);
+  }
 });
+g3dCanvas.addEventListener('pointermove', e=>{
+  const rect = g3dCanvas.getBoundingClientRect();
+  g3dMouseX = e.clientX-rect.left; g3dMouseY = e.clientY-rect.top; g3dMouseIn = true;
+  if (g3dPointers.has(e.pointerId)) g3dPointers.set(e.pointerId, {x:e.clientX,y:e.clientY});
+
+  if (g3dPointers.size===2){
+    const pts = [...g3dPointers.values()];
+    const d = Math.hypot(pts[0].x-pts[1].x, pts[0].y-pts[1].y);
+    if (g3dCanvas._pinchD) cam.targetDist = Math.max(CAM_MIN_DIST, Math.min(CAM_MAX_DIST, cam.targetDist-(d-g3dCanvas._pinchD)*0.9));
+    g3dCanvas._pinchD = d;
+    return;
+  }
+  if (g3dDragging){
+    const dx = e.clientX-g3dLastX, dy = e.clientY-g3dLastY;
+    g3dMoved += Math.abs(dx)+Math.abs(dy);
+    cam.theta -= dx*0.0055;
+    cam.phi = clampPhi(cam.phi - dy*0.0055);
+    cam.vTheta = -dx*0.0055; cam.vPhi = -dy*0.0055;
+    g3dLastX=e.clientX; g3dLastY=e.clientY;
+  }
+});
+addEventListener('pointerup', e=>{
+  if (!g3dPointers.has(e.pointerId)) return;
+  g3dPointers.delete(e.pointerId);
+  g3dCanvas._pinchD = null;
+  if (g3dDragging && g3dPointers.size===0){
+    g3dDragging=false;
+    if (g3dMoved<6 && performance.now()-g3dDownT<400){
+      const rect = g3dCanvas.getBoundingClientRect();
+      g3dHitTest(e.clientX-rect.left, e.clientY-rect.top, true);
+    }
+  }
+});
+g3dCanvas.addEventListener('pointerleave', ()=>{ g3dMouseIn=false; g3dHovered=null; g3dTooltip.classList.remove('show'); });
+g3dCanvas.addEventListener('wheel', e=>{
+  e.preventDefault();
+  g3dTouched();
+  cam.targetDist = Math.max(CAM_MIN_DIST, Math.min(CAM_MAX_DIST, cam.targetDist + e.deltaY*0.45));
+}, {passive:false});
+
+function cross(a,b){ return { x:a.y*b.z-a.z*b.y, y:a.z*b.x-a.x*b.z, z:a.x*b.y-a.y*b.x }; }
+function vnorm(a){ const l=Math.hypot(a.x,a.y,a.z)||1; return {x:a.x/l,y:a.y/l,z:a.z/l}; }
+function project(pos, eye, fwd, right, up, focal, cx, cy){
+  const rx=pos.x-eye.x, ry=pos.y-eye.y, rz=pos.z-eye.z;
+  const cz = rx*fwd.x+ry*fwd.y+rz*fwd.z;
+  if (cz<=1) return null;
+  const cxp = rx*right.x+ry*right.y+rz*right.z;
+  const cyp = rx*up.x+ry*up.y+rz*up.z;
+  const scale = focal/cz;
+  return { x:cx+cxp*scale, y:cy-cyp*scale, scale, cz };
+}
+
+const STAR3D = Array.from({length:260},()=>{
+  const th=Math.random()*Math.PI*2, ph=Math.acos(Math.random()*2-1), r=560+Math.random()*260;
+  const tint=Math.random();
+  const c = tint<0.15 ? '190,210,255' : tint<0.3 ? '255,225,190' : '255,255,255';
+  return { pos:{x:r*Math.sin(ph)*Math.cos(th), y:r*Math.cos(ph)*0.6, z:r*Math.sin(ph)*Math.sin(th)}, r:Math.random()*1.3+0.5, tw:Math.random(), c };
+});
+setInterval(()=>{ STAR3D.forEach(s=>{ if (Math.random()<0.4) s.tw = Math.random(); }); }, 260);
+
+let g3dHitList = [];
+function g3dHitTest(mx,my,click){
+  let best=null, bestD=Infinity;
+  g3dHitList.forEach(h=>{
+    const d = Math.hypot(h.sx-mx, h.sy-my);
+    if (d < Math.max(18, h.pr+10) && d<bestD){ bestD=d; best=h; }
+  });
+  if (click){ if (best) goToPlanet(best.def.id); return; }
+  g3dHovered = best ? best.def.id : null;
+}
+
+function renderGalaxy3D(){
+  requestAnimationFrame(renderGalaxy3D);
+  if (!g3dWrap.offsetParent) return;
+  if (!resizeG3D()) return;
+
+  if (!g3dDragging){
+    cam.theta += cam.vTheta; cam.phi = clampPhi(cam.phi+cam.vPhi);
+    cam.vTheta *= 0.92; cam.vPhi *= 0.92;
+    if (!REDUCED_MOTION && performance.now()-g3dLastInteraction>2200) cam.theta += 0.0016;
+  }
+  cam.dist += (cam.targetDist-cam.dist)*0.12;
+
+  const t = nowSec();
+  const eye = { x:cam.dist*Math.sin(cam.phi)*Math.cos(cam.theta), y:cam.dist*Math.cos(cam.phi), z:cam.dist*Math.sin(cam.phi)*Math.sin(cam.theta) };
+  const fwd = vnorm({ x:-eye.x, y:-eye.y, z:-eye.z });
+  let right = vnorm(cross(fwd, {x:0,y:1,z:0}));
+  if (!isFinite(right.x)) right = {x:1,y:0,z:0};
+  const up = cross(right, fwd);
+  const cx = cssW/2, cy = cssH/2, focal = cssH*1.05;
+
+  gctx.clearRect(0,0,cssW,cssH);
+
+  STAR3D.forEach(s=>{
+    const p = project(s.pos, eye, fwd, right, up, focal, cx, cy);
+    if (!p || p.x<-20||p.x>cssW+20||p.y<-20||p.y>cssH+20) return;
+    gctx.fillStyle = `rgba(${s.c},${(0.25+0.55*s.tw).toFixed(2)})`;
+    gctx.beginPath(); gctx.arc(p.x,p.y,s.r,0,Math.PI*2); gctx.fill();
+  });
+
+  const planets = PLANET_DEFS.map(def=>{
+    const a = def.phase + t*def.speed;
+    const z0 = def.orbit*Math.sin(a);
+    return { def, pos:{ x:def.orbit*Math.cos(a), y:z0*Math.sin(def.incline), z:z0*Math.cos(def.incline) } };
+  });
+
+  planets.forEach(pl=>{
+    const N=72; let started=false;
+    gctx.beginPath();
+    for(let i=0;i<=N;i++){
+      const a=(i/N)*Math.PI*2, z0=pl.def.orbit*Math.sin(a);
+      const wp={ x:pl.def.orbit*Math.cos(a), y:z0*Math.sin(pl.def.incline), z:z0*Math.cos(pl.def.incline) };
+      const p = project(wp, eye, fwd, right, up, focal, cx, cy);
+      if (!p){ started=false; continue; }
+      if (!started){ gctx.moveTo(p.x,p.y); started=true; } else gctx.lineTo(p.x,p.y);
+    }
+    gctx.strokeStyle='rgba(255,255,255,.08)'; gctx.lineWidth=1; gctx.stroke();
+  });
+
+  const drawables = [];
+  const sunP = project({x:0,y:0,z:0}, eye, fwd, right, up, focal, cx, cy);
+  if (sunP){
+    drawables.push({ cz:sunP.cz, draw:()=>{
+      const r = Math.max(6, 15*sunP.scale);
+      const g = gctx.createRadialGradient(sunP.x-r*0.3,sunP.y-r*0.3,0, sunP.x,sunP.y,r*1.9);
+      g.addColorStop(0,'rgba(255,246,190,.9)'); g.addColorStop(.5,'rgba(255,232,31,.35)'); g.addColorStop(1,'rgba(255,232,31,0)');
+      gctx.fillStyle=g; gctx.beginPath(); gctx.arc(sunP.x,sunP.y,r*1.9,0,Math.PI*2); gctx.fill();
+      const g2 = gctx.createRadialGradient(sunP.x-r*0.3,sunP.y-r*0.3,0, sunP.x,sunP.y,r);
+      g2.addColorStop(0,'#fff9d6'); g2.addColorStop(.5,'#FFE81F'); g2.addColorStop(1,'#7a6600');
+      gctx.fillStyle=g2; gctx.beginPath(); gctx.arc(sunP.x,sunP.y,r,0,Math.PI*2); gctx.fill();
+    }});
+  }
+
+  g3dHitList = [];
+  planets.forEach(pl=>{
+    const p = project(pl.pos, eye, fwd, right, up, focal, cx, cy);
+    if (!p) return;
+    const pr = Math.max(3.2, pl.def.radius*p.scale);
+    g3dHitList.push({ def:pl.def, sx:p.x, sy:p.y, pr });
+    drawables.push({ cz:p.cz, draw:()=>{
+      const ld = vnorm({ x:-pl.pos.x, y:-pl.pos.y, z:-pl.pos.z });
+      const lp = project({ x:pl.pos.x+ld.x*pl.def.radius*0.9, y:pl.pos.y+ld.y*pl.def.radius*0.9, z:pl.pos.z+ld.z*pl.def.radius*0.9 }, eye, fwd, right, up, focal, cx, cy);
+      const ox = lp ? (lp.x-p.x)*0.6 : -pr*0.3, oy = lp ? (lp.y-p.y)*0.6 : -pr*0.3;
+
+      const glow = gctx.createRadialGradient(p.x,p.y,pr*0.7, p.x,p.y,pr*2.1);
+      glow.addColorStop(0,`rgba(${pl.def.glow},.35)`); glow.addColorStop(1,`rgba(${pl.def.glow},0)`);
+      gctx.fillStyle=glow; gctx.beginPath(); gctx.arc(p.x,p.y,pr*2.1,0,Math.PI*2); gctx.fill();
+
+      const grad = gctx.createRadialGradient(p.x+ox,p.y+oy,0, p.x,p.y,pr*1.05);
+      grad.addColorStop(0,pl.def.hi); grad.addColorStop(.55,pl.def.mid); grad.addColorStop(1,pl.def.base);
+      gctx.fillStyle=grad; gctx.beginPath(); gctx.arc(p.x,p.y,pr,0,Math.PI*2); gctx.fill();
+
+      if (pl.def.deathstar){
+        gctx.strokeStyle='rgba(20,20,24,.6)'; gctx.lineWidth=Math.max(1,pr*0.05);
+        gctx.beginPath(); gctx.moveTo(p.x-pr,p.y-pr*0.28); gctx.lineTo(p.x+pr,p.y-pr*0.28); gctx.stroke();
+        gctx.fillStyle='rgba(20,20,24,.55)';
+        gctx.beginPath(); gctx.arc(p.x-pr*0.42,p.y-pr*0.55,pr*0.16,0,Math.PI*2); gctx.fill();
+      }
+      if (g3dHovered===pl.def.id){
+        gctx.strokeStyle=`rgba(${pl.def.glow},.9)`; gctx.lineWidth=1.4;
+        gctx.beginPath(); gctx.arc(p.x,p.y,pr+5,0,Math.PI*2); gctx.stroke();
+      }
+    }});
+  });
+
+  drawables.sort((a,b)=>b.cz-a.cz).forEach(d=>d.draw());
+
+  if (!g3dDragging && g3dMouseIn) g3dHitTest(g3dMouseX, g3dMouseY, false);
+  if (g3dHovered){
+    const h = g3dHitList.find(x=>x.def.id===g3dHovered);
+    if (h){
+      g3dTooltip.style.left = h.sx+'px'; g3dTooltip.style.top = (h.sy-h.pr)+'px';
+      g3dTooltip.style.setProperty('--tooltip-c', `rgba(${h.def.glow},.5)`);
+      g3dTooltip.innerHTML = h.def.name+'<small>'+h.def.sub+'</small>';
+      g3dTooltip.classList.add('show');
+      g3dCanvas.style.cursor='pointer';
+    }
+  } else {
+    g3dTooltip.classList.remove('show');
+    g3dCanvas.style.cursor = g3dDragging ? 'grabbing' : 'grab';
+  }
+}
+requestAnimationFrame(renderGalaxy3D);
+
+function focusPlanetCamera(id){
+  return new Promise(resolve=>{
+    const def = PLANET_DEFS.find(p=>p.id===id);
+    if (!def){ resolve(); return; }
+    const a = def.phase + nowSec()*def.speed;
+    const s0 = { theta:cam.theta, phi:cam.phi, dist:cam.dist };
+    const e1 = { theta:s0.theta+normAngle(a+0.5-s0.theta), phi:clampPhi(1.18), dist:def.orbit*0.55+34 };
+    const start = performance.now(), DUR=560;
+    cam.vTheta=0; cam.vPhi=0;
+    function step(now){
+      const tt = Math.min((now-start)/DUR,1);
+      const k = tt<0.5 ? 2*tt*tt : -1+(4-2*tt)*tt;
+      cam.theta = s0.theta+(e1.theta-s0.theta)*k;
+      cam.phi = s0.phi+(e1.phi-s0.phi)*k;
+      cam.dist = s0.dist+(e1.dist-s0.dist)*k;
+      cam.targetDist = cam.dist;
+      if (tt<1) requestAnimationFrame(step); else resolve();
+    }
+    requestAnimationFrame(step);
+  });
+}
+function resetGalaxyCamera(){
+  const s0 = { phi:cam.phi, dist:cam.dist };
+  const start = performance.now(), DUR=700;
+  function step(now){
+    const tt = Math.min((now-start)/DUR,1);
+    const k = tt<0.5 ? 2*tt*tt : -1+(4-2*tt)*tt;
+    cam.phi = s0.phi+(CAM_DEFAULT.phi-s0.phi)*k;
+    cam.dist = s0.dist+(CAM_DEFAULT.dist-s0.dist)*k;
+    cam.targetDist = cam.dist;
+    if (tt<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
 
 /* ============================================================
    VIEW NAVIGATION + HYPERSPACE TRANSITION
@@ -901,9 +1121,13 @@ let navigating = false;
 async function goToPlanet(id){
   if (navigating) return;
   navigating = true;
+  if (id!=='dashboard' && typeof focusPlanetCamera==='function' && PLANET_DEFS.some(p=>p.id===id)){
+    await focusPlanetCamera(id);
+  }
   document.body.classList.add('jumping');
   await hyperspaceJump(()=> switchView(id));
   document.body.classList.remove('jumping');
+  if (id==='dashboard' && typeof resetGalaxyCamera==='function') resetGalaxyCamera();
   navigating = false;
 }
 function switchView(id){
@@ -924,14 +1148,19 @@ resizeBG();
 addEventListener('resize', ()=>{ resizeBG(); resizeHy(); });
 
 const STAR_COUNT = 200;
-const stars = Array.from({length:STAR_COUNT},()=>({
-  x: Math.random()*W, y: Math.random()*H,
-  r: Math.random()*1.3+0.3,
-  tw: Math.random()*Math.PI*2,
-  drift: Math.random()*0.15+0.02
-}));
+const stars = Array.from({length:STAR_COUNT},()=>{
+  const tint = Math.random();
+  const c = tint<0.12 ? '190,210,255' : tint<0.24 ? '255,225,190' : '255,255,255';
+  return {
+    x: Math.random()*W, y: Math.random()*H,
+    r: Math.random()*1.3+0.3,
+    tw: Math.random()*Math.PI*2,
+    drift: Math.random()*0.15+0.02,
+    c
+  };
+});
 
-const SHIP_STYLE = { xwing:{color:'#f0a53d',laser:'#5cf27a'}, tie:{color:'#a7adb6',laser:'#ff4d5e'} };
+const SHIP_STYLE = { xwing:{color:'#f0a53d',rgb:'240,165,61',laser:'#5cf27a'}, tie:{color:'#a7adb6',rgb:'167,173,182',laser:'#ff4d5e'} };
 let ships = [], bolts = [], particles = [];
 
 function spawnShip(type){
@@ -943,13 +1172,18 @@ function spawnShip(type){
     vx: (fromLeft?1:-1)*(0.5+Math.random()*0.5),
     vy: (Math.random()-0.5)*0.12,
     cooldown: 80+Math.random()*100,
-    alive:true
+    alive:true,
+    trail:[]
   });
 }
 
 function updateBG(){
   stars.forEach(s=>{ s.tw += s.drift; });
-  ships.forEach(sh=>{ sh.x += sh.vx; sh.y += sh.vy; });
+  ships.forEach(sh=>{
+    sh.x += sh.vx; sh.y += sh.vy;
+    sh.trail.push({x:sh.x,y:sh.y});
+    if (sh.trail.length>12) sh.trail.shift();
+  });
   ships = ships.filter(sh=> sh.x>-100 && sh.x<W+100 && sh.alive);
 
   if (Math.random() < 0.008 && ships.length < 5) spawnShip(Math.random()<0.5?'xwing':'tie');
@@ -1008,19 +1242,31 @@ function drawShip(sh){
     bctx.moveTo(-2,0); bctx.lineTo(-9,0);
     bctx.stroke();
   }
-  bctx.globalAlpha = 0.35;
-  bctx.beginPath(); bctx.moveTo(-9,0); bctx.lineTo(-22,0); bctx.strokeStyle=c; bctx.lineWidth=0.8; bctx.stroke();
   bctx.restore();
+}
+
+function drawTrail(sh){
+  const rgb = SHIP_STYLE[sh.type].rgb;
+  bctx.lineCap = 'round';
+  for (let i=1;i<sh.trail.length;i++){
+    const k = i/sh.trail.length;
+    bctx.strokeStyle = `rgba(${rgb},${(k*0.4).toFixed(2)})`;
+    bctx.lineWidth = 1.8*k;
+    bctx.beginPath();
+    bctx.moveTo(sh.trail[i-1].x, sh.trail[i-1].y);
+    bctx.lineTo(sh.trail[i].x, sh.trail[i].y);
+    bctx.stroke();
+  }
 }
 
 function drawBG(){
   bctx.clearRect(0,0,W,H);
   stars.forEach(s=>{
     const alpha = 0.35+0.5*Math.abs(Math.sin(s.tw));
-    bctx.fillStyle = `rgba(255,255,255,${alpha.toFixed(2)})`;
+    bctx.fillStyle = `rgba(${s.c},${alpha.toFixed(2)})`;
     bctx.beginPath(); bctx.arc(s.x,s.y,s.r,0,Math.PI*2); bctx.fill();
   });
-  ships.forEach(drawShip);
+  ships.forEach(sh=>{ drawTrail(sh); drawShip(sh); });
   bolts.forEach(b=>{
     const x = b.x+(b.tx-b.x)*b.t, y = b.y+(b.ty-b.y)*b.t;
     const bx = b.x+(b.tx-b.x)*Math.max(0,b.t-0.14), by = b.y+(b.ty-b.y)*Math.max(0,b.t-0.14);

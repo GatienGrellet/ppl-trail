@@ -279,16 +279,23 @@ header.topbar{
 .crawl-stars{position:absolute;inset:0}
 .crawl-logo{position:absolute;top:8%;text-align:center;width:100%;font-family:'Orbitron';color:var(--gold);letter-spacing:8px;font-size:clamp(20px,4vw,34px);text-shadow:0 0 30px rgba(255,232,31,.5);opacity:0;animation:logoFade 3s ease forwards}
 @keyframes logoFade{0%{opacity:0}20%{opacity:1}80%{opacity:1}100%{opacity:0}}
-.crawl-wrap{perspective:400px;width:100%;height:100%;position:absolute;inset:0;display:flex;justify-content:center;overflow:hidden}
+.crawl-wrap{
+  width:100%;height:100%;position:absolute;inset:0;overflow:hidden;
+  perspective:500px;perspective-origin:50% 14%;
+}
 .crawl-text{
-  position:relative;top:100%;width:min(680px,80vw);color:var(--gold);text-align:center;
+  position:absolute;left:50%;bottom:8%;width:min(680px,80vw);color:var(--gold);text-align:center;
   font-family:'Orbitron';font-size:clamp(14px,2vw,20px);line-height:2;letter-spacing:1px;
-  transform:rotateX(28deg);transform-origin:50% 100%;
-  animation:crawl 26s linear forwards;
+  transform-origin:50% 100%;
+  animation:crawl 28s linear forwards;
 }
 .crawl-text h3{font-size:1.3em;margin-bottom:.6em;letter-spacing:3px}
 .crawl-text p{margin-bottom:1.4em;color:#ffef7a}
-@keyframes crawl{0%{top:100%}100%{top:-620%}}
+@keyframes crawl{
+  0%   { transform:translateX(-50%) translateZ(0)      rotateX(35deg); opacity:1; }
+  78%  { transform:translateX(-50%) translateZ(-950px)  rotateX(35deg); opacity:1; }
+  100% { transform:translateX(-50%) translateZ(-1250px) rotateX(35deg); opacity:0; }
+}
 .skip-btn{
   position:absolute;bottom:34px;left:50%;transform:translateX(-50%);
   border:1px solid var(--gold-dim);color:var(--gold);padding:10px 22px;border-radius:999px;
@@ -1298,7 +1305,7 @@ function drawCrawl(){
 let crawlInterval = setInterval(drawCrawl, 200);
 
 document.getElementById('skipCrawl').addEventListener('click', closeCrawl);
-setTimeout(closeCrawl, 27000);
+setTimeout(closeCrawl, 28800);
 let crawlClosed = false;
 function closeCrawl(){
   if (crawlClosed) return;
